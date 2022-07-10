@@ -32,7 +32,8 @@ export class UnicodeCodePoint {
     return this.#str;
   }
   static isEqual(args, arg2) {
-    return (args.#str === arg2.#str);
+    return false;
+//    return (args.#str === arg2.#str);
   }
   static fromSurrogatePair(args) {
     if (!isBareObject(args)) {
