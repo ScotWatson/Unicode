@@ -22,7 +22,7 @@ function start( [ loadEvt, unicodeModule ] ) {
   fileInput.type = "file";
   fileInput.addEventListener("change", function (evt) {
     const file = fileInput.files[0];
-    const stream = file.arrayBuffer().then(parse).then(getGeneralCategory).then(JSON.serialize).then(save);
+    const stream = file.arrayBuffer().then(parse).then(getGeneralCategory).then(JSON.serialize).then(save, fail);
   });
   document.body.appendChild(fileInput);
 }
@@ -94,6 +94,7 @@ function getGeneralCategory(rows) {
 }
 
 function save(str) {
+  console.log("saving");
   const blob = new Blob( [ "const generalCategory = ", str ] );
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
