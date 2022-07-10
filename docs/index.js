@@ -21,6 +21,7 @@ function start( [ loadEvt, unicodeModule ] ) {
   const fileInput = document.createElement("input");
   fileInput.type = "file";
   fileInput.addEventListener("change", function (evt) {
+    const file = fileInput.files[0];
     const stream = file.arrayBuffer().then(parse).then(getGeneralCategory).then(JSON.parse).then(save);
   });
   document.body.appendChild(fileInput);
