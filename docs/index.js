@@ -49,7 +49,7 @@ function start( [ loadEvt, unicodeModule ] ) {
     try {
       const value = parseInt(inpUnicodeValue.value, 16);
       console.log(value);
-      thisChar = new UnicodeCodePoint(value);
+      thisChar = new unicodeModule.UnicodeCodePoint(value);
       divUnicodeChar.innerHTML = "";
       divUnicodeChar.appendChild(document.createTextNode(thisChar.toString()));
       divUnicodeCategory.innerHTML = "";
