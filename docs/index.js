@@ -23,7 +23,6 @@ function start( [ loadEvt, unicodeModule ] ) {
   fileInput.addEventListener("change", function (evt) {
     console.log("start");
     const file = fileInput.files[0];
-    console.log(file);
     const buffering = file.arrayBuffer();
     buffering.catch(fail);
     const parsing = buffering.then(parse);
@@ -42,7 +41,7 @@ function fail(error) {
 }
 
 function parse(buffer) {
-  console.log(buffer);
+  console.log("parse");
   let pos = 0;
   let byte;
   let columnStart = 0;
@@ -51,6 +50,7 @@ function parse(buffer) {
   let rows = [];
   const utf8decoder = new TextDecoder("utf-8");
   const bufferView = new DataView(buffer);
+  console.log(bufferView.byteLength);
   while (pos < bufferView.byteLength) {
     byte = bufferView.getUint8(pos);
     if (comment) {
