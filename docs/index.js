@@ -94,7 +94,7 @@ function parse(buffer) {
       }
     }
     ++pos;
-    if (pos % 1000 === 0) {
+    if (pos % 10000 === 0) {
       console.log(pos);
     }
   }
