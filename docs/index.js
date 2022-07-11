@@ -94,8 +94,9 @@ function parse(buffer) {
       }
     }
     ++pos;
-    if (pos % 10000 === 0) {
+    if ((pos >= 274000) && (pos % 100 === 0)) {
       console.log(pos);
+      console.log(row);
     }
   }
   console.log(rows);
