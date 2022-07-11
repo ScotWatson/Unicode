@@ -80,6 +80,7 @@ function parse(buffer) {
     }
     ++pos;
   }
+  console.log(rows);
   return rows;
 }
 
