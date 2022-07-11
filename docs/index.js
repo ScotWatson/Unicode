@@ -50,8 +50,6 @@ function parse(buffer) {
   let rows = [];
   const utf8decoder = new TextDecoder("utf-8");
   const bufferView = new DataView(buffer);
-  console.log(bufferView.byteLength);
-  console.log(pos);
   while (pos < bufferView.byteLength) {
     byte = bufferView.getUint8(pos);
     if (comment) {
@@ -62,7 +60,6 @@ function parse(buffer) {
           comment = false;
           rows.push(row);
           row = [];
-          console.log("end of comment row");
           break;
         default:
           break;
@@ -76,13 +73,11 @@ function parse(buffer) {
           columnStart = pos + 1;
           rows.push(row);
           row = [];
-          console.log("end of data row");
           break;
         case 0x23:  // "#"
           row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
           columnStart = pos + 1;
           comment = true;
-          console.log("start comment");
           break;
         case 0x3B:  // ";"
           // end of column
@@ -94,12 +89,10 @@ function parse(buffer) {
       }
     }
     ++pos;
-    if ((pos >= 274000) && (pos % 100 === 0)) {
-      console.log(pos);
-      console.log(row);
+    if (pos % 1000 === 0) {
+      console.log(((pos / bufferView.byteLength) * 100) + "%");
     }
   }
-  console.log(rows);
   return rows;
 }
 
@@ -117,11 +110,17 @@ function getGeneralCategory(rows) {
 
 function save(str) {
   console.log("saving");
-  const blob = new Blob( [ "const generalCategory = ", str ] );
+  let header = "/*\n"
+    + "(c) 2022 Scot Watson  All Rights Reserved\n"
+    + "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    + "*/\n"
+    + "\n"
+    + "export const generalCategory_1_1_5 = ";
+  const blob = new Blob( [ header, str ] );
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "category.js";
+  a.download = "category-1.1.5.mjs";
   document.body.appendChild(a);
   a.click();
   a.remove();
