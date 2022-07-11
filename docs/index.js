@@ -38,6 +38,22 @@ function start( [ loadEvt, unicodeModule ] ) {
     const saving = stringifying.then(save, fail);
   });
   document.body.appendChild(fileInput);
+  const divUnicodeChar = document.createElement("div");
+  document.body.appendChild(divUnicodeChar);
+  const divUnicodeCategory = document.createElement("div");
+  document.body.appendChild(divUnicodeCategory);
+  const inpUnicodeValue = document.createElement("input");
+  inpUnicodeValue.type = "text";
+  let thisChar;
+  inpUnicodeValue.addEventListener("change", function (evt) {
+    const value = parseInt(inpUnicodeValue.value, 16);
+    thisChar = new UnicodeCodePoint(value);
+    divUnicodeChar.innerHTML = "";
+    divUnicodeChar.appendChild(document.createTextNode(thisChar.toString()));
+    divUnicodeCategory.innerHTML = "";
+    divUnicodeCategory.appendChild(document.createTextNode(thisChar.category));
+  });
+  document.body.appendChild(inpUnicodeValue);
 }
 
 function fail(error) {
