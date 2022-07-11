@@ -72,21 +72,21 @@ function parse(buffer) {
         case 0x0A:  // LF
         case 0x0D:  // CR
           // end of row
-          row.push(utf8decoder.decode(new Uint8Array(columnStart, pos)));
+          row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
           columnStart = pos + 1;
           rows.push(row);
           row = [];
           console.log("end of data row");
           break;
         case 0x23:  // "#"
-          row.push(utf8decoder.decode(new Uint8Array(columnStart, pos)));
+          row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
           columnStart = pos + 1;
           comment = true;
           console.log("start comment");
           break;
         case 0x3B:  // ";"
           // end of column
-          row.push(utf8decoder.decode(new Uint8Array(columnStart, pos)));
+          row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
           columnStart = pos + 1;
           break;
         default:
