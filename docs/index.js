@@ -39,8 +39,9 @@ function parse(buffer) {
   let row = [];
   let rows = [];
   const utf8decoder = new TextDecoder("utf-8");
-  while (pos < buffer.byteLength) {
-    byte = buffer[pos];
+  const bufferView = new DataView(buffer);
+  while (pos < bufferView.byteLength) {
+    byte = buffer.getUint8(pos);
     if (comment) {
       switch (byte) {
         case 0x0A:  // LF
