@@ -30,6 +30,9 @@ export class UnicodeCodePoint {
     }
     this.#str = String.fromCodePoint(value);
   }
+  valueOf() {
+    this.#str.codePointAt(0);
+  }
   toString() {
     return this.#str;
   }
