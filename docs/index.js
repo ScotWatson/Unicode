@@ -21,6 +21,7 @@ function start( [ loadEvt, unicodeModule ] ) {
   const fileInput = document.createElement("input");
   fileInput.type = "file";
   fileInput.addEventListener("change", function (evt) {
+    console.log("start");
     const file = fileInput.files[0];
     const buffering = file.arrayBuffer();
     buffering.catch(fail);
