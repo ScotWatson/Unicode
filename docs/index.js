@@ -22,7 +22,7 @@ function start( [ loadEvt, unicodeModule ] ) {
   fileInput.type = "file";
   fileInput.addEventListener("change", function (evt) {
     const file = fileInput.files[0];
-    const stream = file.arrayBuffer().then(parse).then(getGeneralCategory).then(JSON.serialize).then(save, fail);
+    const stream = file.arrayBuffer().then(parse).then(getGeneralCategory).then(JSON.stringify).then(save, fail);
   });
   document.body.appendChild(fileInput);
 }
