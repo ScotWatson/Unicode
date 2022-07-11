@@ -41,7 +41,7 @@ function parse(buffer) {
   const utf8decoder = new TextDecoder("utf-8");
   const bufferView = new DataView(buffer);
   while (pos < bufferView.byteLength) {
-    byte = buffer.getUint8(pos);
+    byte = bufferView.getUint8(pos);
     if (comment) {
       switch (byte) {
         case 0x0A:  // LF
