@@ -46,12 +46,17 @@ function start( [ loadEvt, unicodeModule ] ) {
   inpUnicodeValue.type = "text";
   let thisChar;
   inpUnicodeValue.addEventListener("change", function (evt) {
-    const value = parseInt(inpUnicodeValue.value, 16);
-    thisChar = new UnicodeCodePoint(value);
-    divUnicodeChar.innerHTML = "";
-    divUnicodeChar.appendChild(document.createTextNode(thisChar.toString()));
-    divUnicodeCategory.innerHTML = "";
-    divUnicodeCategory.appendChild(document.createTextNode(thisChar.category));
+    try {
+      const value = parseInt(inpUnicodeValue.value, 16);
+      console.log(value);
+      thisChar = new UnicodeCodePoint(value);
+      divUnicodeChar.innerHTML = "";
+      divUnicodeChar.appendChild(document.createTextNode(thisChar.toString()));
+      divUnicodeCategory.innerHTML = "";
+      divUnicodeCategory.appendChild(document.createTextNode(thisChar.category));
+    } catch (e) {
+      console.error(e);
+    }
   });
   document.body.appendChild(inpUnicodeValue);
 }
