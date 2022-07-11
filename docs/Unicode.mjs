@@ -34,7 +34,7 @@ export class UnicodeCodePoint {
     return this.#str;
   }
   get category() {
-    return Category_1_1_5.category_1_1_5[this.#str.codePointAt(0)];
+    return Category_1_1_5.generalCategory_1_1_5[this.#str.codePointAt(0)];
   }
   static isEqual(args, arg2) {
     if (!(args instanceof UnicodeCodePoint)) {
