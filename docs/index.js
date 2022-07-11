@@ -41,6 +41,7 @@ function fail(error) {
 }
 
 function parse(buffer) {
+  console.log(buffer);
   let pos = 0;
   let byte;
   let columnStart = 0;
