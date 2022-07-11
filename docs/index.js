@@ -98,7 +98,7 @@ function save(str) {
   const blob = new Blob( [ "const generalCategory = ", str ] );
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.link = url;
+  a.href = url;
   a.download = "category.js";
   document.body.appendChild(a);
   a.click();
