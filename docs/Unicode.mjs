@@ -26,14 +26,19 @@ export class UnicodeCodePoint {
     if (value < 0 || value > 0x10FFFF) {
       throw new Error("Invalid Arguments: value must be between 0 and 0x10FFFF");
     }
-    #str = String.fromCodePoint(value);
+    this.#str = String.fromCodePoint(value);
   }
   toString() {
     return this.#str;
   }
   static isEqual(args, arg2) {
-    return false;
-//    return (args.#str === arg2.#str);
+    if (!(args instanceof UnicodeCodePoint)) {
+      throw new Error("Invalid Arguments: Must be UnicodeCodePoint");
+    }
+    if (!(arg2 instanceof UnicodeCodePoint)) {
+      throw new Error("Invalid Arguments: Must be UnicodeCodePoint");
+    }
+    return (args.#str === arg2.#str);
   }
   static fromSurrogatePair(args) {
     if (!isBareObject(args)) {
