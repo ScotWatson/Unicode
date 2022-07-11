@@ -23,6 +23,7 @@ function start( [ loadEvt, unicodeModule ] ) {
   fileInput.addEventListener("change", function (evt) {
     console.log("start");
     const file = fileInput.files[0];
+    console.log(file);
     const buffering = file.arrayBuffer();
     buffering.catch(fail);
     const parsing = buffering.then(parse);
