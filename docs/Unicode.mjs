@@ -3,6 +3,8 @@
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+import * from "https://scotwatson.github.io/Unicode/category-1.1.5.mjs";
+
 export class UnicodeCodePoint {
   #str;
   constructor(args) {
@@ -30,6 +32,9 @@ export class UnicodeCodePoint {
   }
   toString() {
     return this.#str;
+  }
+  get category() {
+    return category_1_1_5[this.#str.codePointAt(0)];
   }
   static isEqual(args, arg2) {
     if (!(args instanceof UnicodeCodePoint)) {
