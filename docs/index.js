@@ -54,7 +54,6 @@ function parse(buffer) {
   console.log(pos);
   while (pos < bufferView.byteLength) {
     byte = bufferView.getUint8(pos);
-    console.log(byte);
     if (comment) {
       switch (byte) {
         case 0x0A:  // LF
@@ -83,6 +82,7 @@ function parse(buffer) {
           row.push(utf8decoder.decode(new Uint8Array(columnStart, pos)));
           columnStart = pos + 1;
           comment = true;
+          console.log("start comment");
           break;
         case 0x3B:  // ";"
           // end of column
@@ -94,6 +94,9 @@ function parse(buffer) {
       }
     }
     ++pos;
+    if (pos % 1000 === 0) {
+      console.log(pos);
+    }
   }
   console.log(rows);
   return rows;
