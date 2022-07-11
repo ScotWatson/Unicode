@@ -61,6 +61,7 @@ function parse(buffer) {
           comment = false;
           rows.push(row);
           row = [];
+          console.log("end of comment row");
           break;
         default:
           break;
@@ -74,6 +75,7 @@ function parse(buffer) {
           columnStart = pos + 1;
           rows.push(row);
           row = [];
+          console.log("end of data row");
           break;
         case 0x23:  // "#"
           row.push(utf8decoder.decode(new Uint8Array(columnStart, pos)));
