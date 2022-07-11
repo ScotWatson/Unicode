@@ -3,6 +3,8 @@
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+const initPageTime = performance.now();
+
 const loadUnicodeModule = import("https://scotwatson.github.io/Unicode/Unicode.mjs");
 
 loadUnicodeModule.then(function (module) {
@@ -18,6 +20,8 @@ const loadWindow = new Promise(function (resolve, reject) {
 Promise.all( [ loadWindow, loadUnicodeModule ] ).then(start, fail);
 
 function start( [ loadEvt, unicodeModule ] ) {
+  const startPageTime = performance.now();
+  console.log("Page load in", startPageTime - initPageTime, "ms");
   const fileInput = document.createElement("input");
   fileInput.type = "file";
   fileInput.addEventListener("change", function (evt) {
