@@ -90,6 +90,7 @@ function getGeneralCategory(rows) {
       ret[index] = row[2];
     }
   }
+  console.log(ret);
   return ret;
 }
 
