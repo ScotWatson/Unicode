@@ -151,7 +151,7 @@ function getGeneralCategory(rows) {
       clearInterval(percentInterval);
     }
   }, 200);
-  return Promise.all(rowPromises);
+  return Promise.all(rowPromises).then(Promise.resolve(ret));
   function parseRow(row) {
     if (row.length >= 15) {
       const index = parseInt(row[0], 16);
