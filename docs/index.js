@@ -150,7 +150,7 @@ function getGeneralCategory(rows) {
     if (rowsParsed === rows.length) {
       clearInterval(percentInterval);
     }
-  });
+  }, 200);
   return Promise.all(rowPromises);
   function parseRow(row) {
     if (row.length >= 15) {
