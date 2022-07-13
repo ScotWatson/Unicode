@@ -122,14 +122,55 @@ function parse(buffer) {
 }
 
 function getGeneralCategory(rows) {
-  const ret = [];
-  for (const row of rows) {
-    if (row.length >= 3) {
+  const ret = {};
+  ret.characterName = [];
+  ret.generalCategory = [];
+  ret.canonicalCombiningClass = [];
+  ret.bidirectionalCategory = [];
+  ret.characterDecomposition = [];
+  ret.decimalDigitValue = [];
+  ret.digitValue = [];
+  ret.numericValue = [];
+  ret.mirrored = [];
+  ret.characterName1 = [];
+  ret.comment10646 = [];
+  ret.upperCaseEquivalent = [];
+  ret.lowerCaseEquivalent = [];
+  ret.titleCaseEquivalent = [];
+  const rowPromises = rows.map(function (row) {
+    return new Promise(function (resolve, reject) {
+      parseRow(row);
+      ++rowsParsed;
+      resolve();
+    });
+  });
+  let rowsParsed = 0;
+  const percentInterval = setInterval(function () {
+    console.log(((rowsParsed / rows.length) * 100) + "%");
+    if (rowsParsed === rows.length) {
+      clearInterval(percentInterval);
+    }
+  });
+  return Promise.all(rowPromises);
+  function parseRow(row) {
+    if (row.length >= 15) {
       const index = parseInt(row[0], 16);
-      ret[index] = row[2];
+      ret.characterName[index] = row[1];
+      ret.generalCategory[index] = row[2];
+      ret.canonicalCombiningClass[index] = row[3];
+      ret.bidirectionalCategory[index] = row[4];
+      ret.characterDecomposition[index] = row[5];
+      ret.decimalDigitValue[index] = row[6];
+      ret.digitValue[index] = row[7];
+      ret.numericValue[index] = row[8];
+      ret.mirrored[index] = row[9];
+      ret.characterName1[index] = row[10];
+      ret.comment10646[index] = row[11];
+      ret.upperCaseEquivalent[index] = row[12];
+      ret.lowerCaseEquivalent[index] = row[13];
+      ret.titleCaseEquivalent[index] = row[14];
     }
   }
-  console.log(ret);
   return ret;
 }
 
@@ -140,12 +181,12 @@ function save(str) {
     + "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
     + "*/\n"
     + "\n"
-    + "export const generalCategory_1_1_5 = ";
+    + "export const characterData = ";
   const blob = new Blob( [ header, str ] );
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "category-1.1.5.mjs";
+  a.download = "characterData.mjs";
   document.body.appendChild(a);
   a.click();
   a.remove();
