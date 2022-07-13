@@ -137,6 +137,7 @@ function getGeneralCategory(rows) {
   ret.upperCaseEquivalent = [];
   ret.lowerCaseEquivalent = [];
   ret.titleCaseEquivalent = [];
+  let rowsParsed = 0;
   const rowPromises = rows.map(function (row) {
     return new Promise(function (resolve, reject) {
       parseRow(row);
@@ -144,7 +145,6 @@ function getGeneralCategory(rows) {
       resolve();
     });
   });
-  let rowsParsed = 0;
   const percentInterval = setInterval(function () {
     console.log(((rowsParsed / rows.length) * 100) + "%");
     if (rowsParsed === rows.length) {
@@ -171,7 +171,6 @@ function getGeneralCategory(rows) {
       ret.titleCaseEquivalent[index] = row[14];
     }
   }
-  return ret;
 }
 
 function save(str) {
