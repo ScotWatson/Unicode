@@ -483,7 +483,7 @@ function start( [ loadEvt, unicodeModule ] ) {
     option.innerHTML = version.folder;
     option.value = version.folder;
     selectVersion.appendChild(option);
-    mapFunctions.add(version.folder, version.parseFunction);
+    mapFunctions.set(version.folder, version.parseFunction);
   }
   selectVersion.addEventListener("change", function (evt) {
     divVersion.innerHTML = "";
