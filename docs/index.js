@@ -473,6 +473,7 @@ function start( [ loadEvt, unicodeModule ] ) {
     }
   });
   document.body.appendChild(inpUnicodeValue);
+  const mapFunctions = new Map();
   const selectVersion = document.createElement("select");
   document.body.appendChild(selectVersion);
   const divVersion = document.createElement("div");
@@ -480,12 +481,14 @@ function start( [ loadEvt, unicodeModule ] ) {
   for (const version of versions) {
     const option = document.createElement("option");
     option.innerHTML = version.folder;
-    option.value = version.parseFunction;
+    option.value = version.folder;
     selectVersion.appendChild(option);
+    mapFunctions.add(version.folder, version.parseFunction);
   }
   selectVersion.addEventListener("change", function (evt) {
     divVersion.innerHTML = "";
-    selectVersion.value(divVersion);
+    const versionFunction = mapFunctions.get(selectVersion.value);
+    versionFunction(divVersion);
   });
 }
 
