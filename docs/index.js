@@ -19,14 +19,64 @@ const loadWindow = new Promise(function (resolve, reject) {
 
 Promise.all( [ loadWindow, loadUnicodeModule ] ).then(start, fail);
 
-function start( [ loadEvt, unicodeModule ] ) {
-  const startPageTime = performance.now();
-  console.log("Page load in", startPageTime - initPageTime, "ms");
+const versions = [
+  { folder: "1.1-Update/", parseFunction: show11Update},
+  { folder: "2.0-Update/", parseFunction: show20Update},
+  { folder: "2.1-Update/", parseFunction: show21Update},
+  { folder: "2.1-Update2/", parseFunction: show21Update_2},
+  { folder: "2.1-Update3/", parseFunction: show21Update_3},
+  { folder: "2.1-Update4/", parseFunction: show21Update_4},
+  { folder: "3.0-Update/", parseFunction: show30Update},
+  { folder: "3.0-Update1/", parseFunction: show30Update_1},
+  { folder: "3.1-Update/", parseFunction: show31Update},
+  { folder: "3.1-Update1/", parseFunction: show31Update_1},
+  { folder: "3.2-Update/", parseFunction: show32Update},
+  { folder: "4.0-Update/", parseFunction: show40Update},
+  { folder: "4.0-Update1/", parseFunction: show40Update_1},
+  { folder: "4.1.0/", parseFunction: show410},
+  { folder: "5.0.0/", parseFunction: show500},
+  { folder: "5.1.0/", parseFunction: show510},
+  { folder: "5.2.0/", parseFunction: show520},
+  { folder: "6.0.0/", parseFunction: show600},
+  { folder: "6.1.0/", parseFunction: show610},
+  { folder: "6.2.0/", parseFunction: show620},
+  { folder: "6.3.0/", parseFunction: show630},
+  { folder: "7.0.0/", parseFunction: show700},
+  { folder: "8.0.0/", parseFunction: show800},
+  { folder: "9.0.0/", parseFunction: show900},
+  { folder: "10.0.0/", parseFunction: show1000},
+  { folder: "11.0.0/", parseFunction: show1100},
+  { folder: "12.0.0/", parseFunction: show1200},
+  { folder: "12.1.0/", parseFunction: show1210},
+  { folder: "13.0.0/", parseFunction: show1300},
+  { folder: "14.0.0/", parseFunction: show1400},
+  { folder: "15.0.0/", parseFunction: show1500},
+];
+
+function addFileRow(tbl, lbl) {
+  const fileRow = document.createElement("tr");
+  tbl.appendChild(fileRow);
+  const fileLabel = document.createElement("td");
+  fileLabel.innerHTML = lbl;
+  fileRow.appendChild(fileLabel);
+  const fileSelect = document.createElement("td");
+  fileRow.appendChild(fileSelect);
   const fileInput = document.createElement("input");
   fileInput.type = "file";
-  fileInput.addEventListener("change", function (evt) {
+  fileSelect.appendChild(fileInput);
+  return fileInput;
+}
+
+function show11Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
     console.log("start");
-    const file = fileInput.files[0];
+    const file = fileUnicodeData.files[0];
     const buffering = file.arrayBuffer();
     buffering.catch(fail);
     const parsing = buffering.then(parse);
@@ -37,7 +87,371 @@ function start( [ loadEvt, unicodeModule ] ) {
     stringifying.catch(fail);
     const saving = stringifying.then(save, fail);
   });
-  document.body.appendChild(fileInput);
+}
+
+function show20Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show21Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show21Update_2(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show21Update_3(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show21Update_4(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show30Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show30Update_1(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show31Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show31Update_1(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show32Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show40Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show40Update_1(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show410(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show500(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show510(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show520(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show600(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show610(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show620(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show630(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show700(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show800(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show900(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show1000(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show1100(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show1200(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show1210(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show1300(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show1400(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function show1500(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+
+function start( [ loadEvt, unicodeModule ] ) {
+  const startPageTime = performance.now();
+  console.log("Page load in", startPageTime - initPageTime, "ms");
   const divUnicodeChar = document.createElement("div");
   document.body.appendChild(divUnicodeChar);
   const divUnicodeCategory = document.createElement("div");
@@ -59,6 +473,20 @@ function start( [ loadEvt, unicodeModule ] ) {
     }
   });
   document.body.appendChild(inpUnicodeValue);
+  const selectVersion = document.createElement("select");
+  document.body.appendChild(selectVersion);
+  const divVersion = document.createElement("div");
+  document.body.appendChild(divVersion);
+  for (const version of versions) {
+    const option = document.createElement("option");
+    option.innerHTML = version.folder;
+    option.value = version.parseFunction;
+    selectVersion.appendChild(option);
+  }
+  selectVersion.addEventListener("change", function (evt) {
+    divVersion.innerHTML = "";
+    selectVersion.value(divVersion);
+  });
 }
 
 function fail(error) {
