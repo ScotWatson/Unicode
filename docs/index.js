@@ -70,6 +70,17 @@ function addFileRow(tbl, lbl) {
 function show11Update(container) {
   const fileTable = document.createElement("table");
   container.appendChild(fileTable);
+  const fileCJK = addFileRow(fileTable, "CJKXREF");
+  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const btnCreateModule = document.createElement("button");
+  container.appendChild(btnCreateModule);
+  btnCreateModule.addEventListener("click", function (evt) {
+    
+  });
+}
+function show20Update(container) {
+  const fileTable = document.createElement("table");
+  container.appendChild(fileTable);
   const rowArabicShaping = addFileRow(fileTable, "ArabicShaping");
   const rowBlocks = addFileRow(fileTable, "Blocks");
   const rowIndex = addFileRow(fileTable, "Index");
@@ -180,7 +191,7 @@ function parseLines(buffer) {
 
 function readArabicShaping(rows) {
   let baseCodePoint;
-  const objModule = {};
+  const arrArabicShaping = [];
   for (const row of rows) {
     const objRow = {};
     const codePoint = parseInt(row[0], 16);
@@ -192,16 +203,14 @@ function readArabicShaping(rows) {
       objRow.link = row[2];
       objRow.linkGroup = row[3];
     }
-    objModule.arrArabicShaping[codePoint - baseCodePoint] = objRow;
+    arrArabicShaping[codePoint - baseCodePoint] = objRow;
   }
-  objModule.baseCodePointArabicShaping = baseCodePoint;
-  return "const arrArabicShaping = " + JSON.stringify(objModule.arrArabicShaping) + ";\n"
-    + "const baseCodePointArabicShaping = " + JSON.stringify(objModule.baseCodePointArabicShaping) + ";\n";
+  return "const arrArabicShaping = " + JSON.stringify(arrArabicShaping) + ";\n"
+    + "const baseCodePointArabicShaping = " + JSON.stringify(baseCodePoint) + ";\n";
 }
 
 function readBlocks(rows) {
-  const objModule = {};
-  objModule.arrBlocks = [];
+  const arrBlocks = [];
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
@@ -209,9 +218,9 @@ function readBlocks(rows) {
       objRow.endCode = parseInt(row[1], 16);
       objRow.blockName = row[2];
     }
-    objModule.arrBlocks.push(objRow);
+    arrBlocks.push(objRow);
   }
-  return "const arrBlocks = " + JSON.stringify(objModule) + ";\n";
+  return "const arrBlocks = " + JSON.stringify(arrBlocks) + ";\n";
 }
 
 function readIndex(rows) {
@@ -229,8 +238,7 @@ function readIndex(rows) {
 }
 
 function readJamo(rows) {
-  const objModule = {};
-  objModule.arrJamo = [];
+  const arrJamo = [];
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
@@ -238,14 +246,13 @@ function readJamo(rows) {
       objRow.shortName = row[1];
       objRow.unicodeName = row[2];
     }
-    objModule.arrJamo.push(objRow);
+    arrJamo.push(objRow);
   }
-  return "const arrJamo = " + JSON.stringify(objModule) + ";\n";
+  return "const arrJamo = " + JSON.stringify(arrJamo) + ";\n";
 }
 
 function readNamesList(rows) {
-  const objModule = {};
-  objModule.arrNamesList = [];
+  const arrNamesList = [];
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
@@ -253,9 +260,9 @@ function readNamesList(rows) {
       objRow.endCode = parseInt(row[2], 16);
       objRow.blockName = row[3];
     }
-    objModule.arrNamesList.push(objRow);
+    arrNamesList.push(objRow);
   }
-  return "const arrNamesList = " + JSON.stringify(objModule) + ";\n";
+  return "const arrNamesList = " + JSON.stringify(arrNamesList) + ";\n";
 }
 
 function readPropList(lines) {
@@ -310,7 +317,7 @@ function readPropList(lines) {
 }
 
 function readProps(rows) {
-  const objModule = {};
+  const arrProps = [];
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
@@ -318,13 +325,13 @@ function readProps(rows) {
       objRow.endCode = parseInt(row[2], 16);
       objRow.blockName = row[3];
     }
-    objModule.arrBlocks.push(objRow);
+    arrProps.push(objRow);
   }
-  return JSON.stringify(objModule);
+  return "const arrProps = " + JSON.stringify(arrProps) + ";\n";
 }
 
 function readUnicodeData(rows) {
-  const objModule = {};
+  const arrUnicodeData = [];
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
@@ -332,13 +339,13 @@ function readUnicodeData(rows) {
       objRow.endCode = parseInt(row[2], 16);
       objRow.blockName = row[3];
     }
-    objModule.arrBlocks.push(objRow);
+    arrUnicodeData.push(objRow);
   }
-  return JSON.stringify(objModule);
+  return "const arrUnicodeData = " + JSON.stringify(arrUnicodeData) + ";\n";
 }
 
 function readUnihan(rows) {
-  const objModule = {};
+  const arrUnihan = [];
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
@@ -346,21 +353,9 @@ function readUnihan(rows) {
       objRow.endCode = parseInt(row[2], 16);
       objRow.blockName = row[3];
     }
-    objModule.arrBlocks.push(objRow);
+    arrUnihan.push(objRow);
   }
-  return JSON.stringify(objModule);
-}
-
-function show20Update(container) {
-  const fileTable = document.createElement("table");
-  container.appendChild(fileTable);
-  const fileCJK = addFileRow(fileTable, "CJKXREF");
-  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
-  const btnCreateModule = document.createElement("button");
-  container.appendChild(btnCreateModule);
-  btnCreateModule.addEventListener("click", function (evt) {
-    
-  });
+  return "const arrUnihan = " + JSON.stringify(arrUnihan) + ";\n";
 }
 
 function show21Update(container) {
