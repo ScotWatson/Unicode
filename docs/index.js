@@ -70,23 +70,285 @@ function addFileRow(tbl, lbl) {
 function show11Update(container) {
   const fileTable = document.createElement("table");
   container.appendChild(fileTable);
-  const fileCJK = addFileRow(fileTable, "CJKXREF");
-  const fileUnicodeData = addFileRow(fileTable, "unicodeData");
+  const rowArabicShaping = addFileRow(fileTable, "ArabicShaping");
+  const rowBlocks = addFileRow(fileTable, "Blocks");
+  const rowIndex = addFileRow(fileTable, "Index");
+  const rowJamo = addFileRow(fileTable, "Jamo");
+  const rowNamesList = addFileRow(fileTable, "NamesList");
+  const rowPropList = addFileRow(fileTable, "PropList");
+  const rowProps = addFileRow(fileTable, "Props");
+  const rowUnicodeData = addFileRow(fileTable, "UnicodeData");
+  const rowUnihan = addFileRow(fileTable, "Unihan");
   const btnCreateModule = document.createElement("button");
   container.appendChild(btnCreateModule);
   btnCreateModule.addEventListener("click", function (evt) {
-    console.log("start");
-    const file = fileUnicodeData.files[0];
-    const buffering = file.arrayBuffer();
-    buffering.catch(fail);
-    const parsing = buffering.then(parse);
-    parsing.catch(fail);
-    const categorizing = parsing.then(getGeneralCategory);
-    categorizing.catch(fail);
-    const stringifying = categorizing.then(JSON.stringify);
-    stringifying.catch(fail);
-    const saving = stringifying.then(save, fail);
+    const strModule = "";
+    const arrAdding = [];
+    
+    const fileArabicShaping = rowArabicShaping.files[0];
+    const bufferingArabicShaping = fileArabicShaping.arrayBuffer();
+    const parsingArabicShaping = bufferingArabicShaping.then(parseSCSV, fail);
+    const readingArabicShaping = parsingArabicShaping.then(readArabicShaping, fail);
+    const addingArabicShaping = readingArabicShaping.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingArabicShaping);
+    
+    const fileBlocks = rowBlocks.files[0];
+    const bufferingBlocks = fileBlocks.arrayBuffer();
+    const parsingBlocks = bufferingBlocks.then(parseSCSV, fail);
+    const readingBlocks = parsingBlocks.then(readBlocks, fail);
+    const addingBlocks = readingBlocks.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingBlocks);
+    
+    const fileIndex = rowIndex.files[0];
+    const bufferingIndex = fileIndex.arrayBuffer();
+    const parsingIndex = bufferingIndex.then(parseTSV, fail);
+    const readingIndex = parsingIndex.then(readIndex, fail);
+    const addingIndex = readingIndex.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingIndex);
+
+    const fileJamo = rowJamo.files[0];
+    const bufferingJamo = fileJamo.arrayBuffer();
+    const parsingJamo = bufferingJamo.then(parseSCSV, fail);
+    const readingJamo = parsingJamo.then(readJamo, fail);
+    const addingJamo = readingJamo.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingJamo);
+/*
+    const fileNamesList = rowNamesList.files[0];
+    const bufferingNamesList = fileNamesList.arrayBuffer();
+    const parsingNamesList = bufferingNamesList.then(parseSCSV, fail);
+    const readingNamesList = parsingNamesList.then(readNamesList, fail);
+    const addingNamesList = readingNamesList.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingNamesList);
+*/
+    const filePropList = rowPropList.files[0];
+    const bufferingPropList = filePropList.arrayBuffer();
+    const parsingPropList = bufferingPropList.then(parsePropList, fail);
+    const readingPropList = parsingPropList.then(readPropList, fail);
+    const addingPropList = readingPropList.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingPropList);
+
+    const fileProps = rowProps.files[0];
+    const bufferingProps = fileProps.arrayBuffer();
+    const parsingProps = bufferingProps.then(parseSCSV, fail);
+    const readingProps = parsingProps.then(readProps, fail);
+    const addingProps = readingProps.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingProps);
+
+    const fileUnicodeData = rowUnicodeData.files[0];
+    const bufferingUnicodeData = fileUnicodeData.arrayBuffer();
+    const parsingUnicodeData = bufferingUnicodeData.then(parseSCSV, fail);
+    const readingUnicodeData = parsingUnicodeData.then(readUnicodeData, fail);
+    const addingUnicodeData = readingUnicodeData.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingUnicodeData);
+    
+    const fileUnihan = rowUnihan.files[0];
+    const bufferingUnihan = fileUnihan.arrayBuffer();
+    const parsingUnihan = bufferingUnihan.then(parseSCSV, fail);
+    const readingUnihan = parsingUnihan.then(readUnihan, fail);
+    const addingUnihan = readingUnihan.then(function (str) { strModule += str; }, fail);
+    arrAdding.push(addingUnihan);
+        
+    const saving = Promise.all(arrAdding).then(save, fail);
   });
+}
+
+function parseLines(buffer) {
+  let pos = 0;
+  let byte;
+  let lineStart = 0;
+  let lines = [];
+  const utf8decoder = new TextDecoder("utf-8");
+  const bufferView = new DataView(buffer);
+  while (pos < bufferView.byteLength) {
+    byte = bufferView.getUint8(pos);
+    switch (byte) {
+      case 0x0A:  // LF
+      case 0x0D:  // CR
+        // end of row
+        lines.push(utf8decoder.decode(new Uint8Array(buffer, lineStart, pos - lineStart)));
+        lineStart = pos + 1;
+        break;
+      default:
+        break;
+    }
+    ++pos;
+    if (pos % 1000 === 0) {
+      console.log(((pos / bufferView.byteLength) * 100) + "%");
+    }
+  }
+}
+
+function readArabicShaping(rows) {
+  let baseCodePoint;
+  const objModule = {};
+  for (const row of rows) {
+    const objRow = {};
+    const codePoint = parseInt(row[0], 16);
+    if (row.length >= 4) {
+      if (!baseCodePoint) {
+        baseCodePoint = codePoint;
+      }
+      objRow.name = row[1];
+      objRow.link = row[2];
+      objRow.linkGroup = row[3];
+    }
+    objModule.arrArabicShaping[codePoint - baseCodePoint] = objRow;
+  }
+  objModule.baseCodePointArabicShaping = baseCodePoint;
+  return "const arrArabicShaping = " + JSON.stringify(objModule.arrArabicShaping) + ";\n"
+    + "const baseCodePointArabicShaping = " + JSON.stringify(objModule.baseCodePointArabicShaping) + ";\n";
+}
+
+function readBlocks(rows) {
+  const objModule = {};
+  objModule.arrBlocks = [];
+  for (const row of rows) {
+    const objRow = {};
+    if (row.length >= 3) {
+      objRow.startCode = parseInt(row[0], 16);
+      objRow.endCode = parseInt(row[1], 16);
+      objRow.blockName = row[2];
+    }
+    objModule.arrBlocks.push(objRow);
+  }
+  return "const arrBlocks = " + JSON.stringify(objModule) + ";\n";
+}
+
+function readIndex(rows) {
+  const objModule = {};
+  objModule.arrIndex = [];
+  for (const row of rows) {
+    const objRow = {};
+    if (row.length >= 2) {
+      objRow.name = row[0];
+      objRow.code = parseInt(row[1], 16);
+    }
+    objModule.arrIndex.push(objRow);
+  }
+  return "const arrIndex = " + JSON.stringify(objModule) + ";\n";
+}
+
+function readJamo(rows) {
+  const objModule = {};
+  objModule.arrJamo = [];
+  for (const row of rows) {
+    const objRow = {};
+    if (row.length >= 3) {
+      objRow.code = parseInt(row[0].substring(2), 16);
+      objRow.shortName = row[1];
+      objRow.unicodeName = row[2];
+    }
+    objModule.arrJamo.push(objRow);
+  }
+  return "const arrJamo = " + JSON.stringify(objModule) + ";\n";
+}
+
+function readNamesList(rows) {
+  const objModule = {};
+  objModule.arrNamesList = [];
+  for (const row of rows) {
+    const objRow = {};
+    if (row.length >= 3) {
+      objRow.startCode = parseInt(row[1], 16);
+      objRow.endCode = parseInt(row[2], 16);
+      objRow.blockName = row[3];
+    }
+    objModule.arrNamesList.push(objRow);
+  }
+  return "const arrNamesList = " + JSON.stringify(objModule) + ";\n";
+}
+
+function readPropList(lines) {
+  const strModule = "";
+  let propList;
+  let propLists = [];
+  function createFunction() {
+    strModule += "export function property_" + propList.name + "(codePoint) {\n"
+      + "  const singleCodes = " + JSON.stringify(propList.singleCodes) + ";\n"
+      + "  return singleCodes.includes(codePoint)\n";
+    for (const condition of propList.rangeConditions) {
+      strModule += "    || " + condition;
+    }
+    strModule += "}\n";
+    delete propList.singleCodes;
+    delete propList.rangeConditions;
+  }
+  for (const line of lines) {
+    if (line.startsWith("Property dump for: 0x")) {
+      if (propList) {
+        createFunction();
+      }
+      const propNumberName = line.substring(21).split(" (");
+      if (propNumberName.length !== 2) {
+        throw new Error("Invalid File Format");
+      }
+      if (!propNumberName[1].endsWith(")")) {
+        throw new Error("Invalid File Format");
+      }
+      propList = {};
+      propList.value = parseInt(propNumberName[0], 16);
+      propList.name = propNumberName[1].substring(0, propNumberName[1].length - 2);
+      propList.singleCodes = [];
+      propList.rangeConditions = [];
+      propLists.push(propList);
+    } else {
+      const codePoints = line.split("..");
+      if (codePoints.length === 2) {
+        startCode = parseInt(codePoints[0], 16);
+        endCode = parseInt(codePoints[1], 16);
+        propList.rangeConditions.push("(codePoint >= " + startCode + " && codePoint <= " + endCode + ")\n");
+      } else {
+        code = parseInt(codePoints[0], 16);
+      }
+    }
+  }
+  if (propList) {
+    createFunction();
+  }
+  strModule += "export const propLists = " + JSON.stringify(propLists) + ";\n";
+  return strModule;
+}
+
+function readProps(rows) {
+  const objModule = {};
+  for (const row of rows) {
+    const objRow = {};
+    if (row.length >= 3) {
+      objRow.startCode = parseInt(row[1], 16);
+      objRow.endCode = parseInt(row[2], 16);
+      objRow.blockName = row[3];
+    }
+    objModule.arrBlocks.push(objRow);
+  }
+  return JSON.stringify(objModule);
+}
+
+function readUnicodeData(rows) {
+  const objModule = {};
+  for (const row of rows) {
+    const objRow = {};
+    if (row.length >= 3) {
+      objRow.startCode = parseInt(row[1], 16);
+      objRow.endCode = parseInt(row[2], 16);
+      objRow.blockName = row[3];
+    }
+    objModule.arrBlocks.push(objRow);
+  }
+  return JSON.stringify(objModule);
+}
+
+function readUnihan(rows) {
+  const objModule = {};
+  for (const row of rows) {
+    const objRow = {};
+    if (row.length >= 3) {
+      objRow.startCode = parseInt(row[1], 16);
+      objRow.endCode = parseInt(row[2], 16);
+      objRow.blockName = row[3];
+    }
+    objModule.arrBlocks.push(objRow);
+  }
+  return JSON.stringify(objModule);
 }
 
 function show20Update(container) {
@@ -496,8 +758,7 @@ function fail(error) {
   document.body.appendChild(document.createTextNode(error.message));
 }
 
-function parse(buffer) {
-  console.log("parse");
+function parseSCSV(buffer) {
   let pos = 0;
   let byte;
   let columnStart = 0;
@@ -543,6 +804,42 @@ function parse(buffer) {
         default:
           break;
       }
+    }
+    ++pos;
+    if (pos % 1000 === 0) {
+      console.log(((pos / bufferView.byteLength) * 100) + "%");
+    }
+  }
+  return rows;
+}
+
+function parseTSV(buffer) {
+  let pos = 0;
+  let byte;
+  let columnStart = 0;
+  let comment = false;
+  let row = [];
+  let rows = [];
+  const utf8decoder = new TextDecoder("utf-8");
+  const bufferView = new DataView(buffer);
+  while (pos < bufferView.byteLength) {
+    byte = bufferView.getUint8(pos);
+    switch (byte) {
+      case 0x0A:  // LF
+      case 0x0D:  // CR
+        // end of row
+        row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
+        columnStart = pos + 1;
+        rows.push(row);
+        row = [];
+        break;
+      case 0x09:  // "\t"
+        // end of column
+        row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
+        columnStart = pos + 1;
+        break;
+      default:
+        break;
     }
     ++pos;
     if (pos % 1000 === 0) {
