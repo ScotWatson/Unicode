@@ -95,72 +95,63 @@ function show20Update(container) {
   container.appendChild(btnCreateModule);
   btnCreateModule.addEventListener("click", function (evt) {
     let strModule = "";
-    const arrAdding = [];
+    const arrReading = [];
     
     const fileArabicShaping = rowArabicShaping.files[0];
     const bufferingArabicShaping = fileArabicShaping.arrayBuffer();
     const parsingArabicShaping = bufferingArabicShaping.then(parseSCSV, fail);
     const readingArabicShaping = parsingArabicShaping.then(readArabicShaping, fail);
-    const addingArabicShaping = readingArabicShaping.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingArabicShaping);
+    arrReading.push(readingArabicShaping);
     
     const fileBlocks = rowBlocks.files[0];
     const bufferingBlocks = fileBlocks.arrayBuffer();
     const parsingBlocks = bufferingBlocks.then(parseSCSV, fail);
     const readingBlocks = parsingBlocks.then(readBlocks, fail);
-    const addingBlocks = readingBlocks.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingBlocks);
+    arrReading.push(readingBlocks);
     
     const fileIndex = rowIndex.files[0];
     const bufferingIndex = fileIndex.arrayBuffer();
     const parsingIndex = bufferingIndex.then(parseTSV, fail);
     const readingIndex = parsingIndex.then(readIndex, fail);
-    const addingIndex = readingIndex.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingIndex);
+    arrReading.push(readingIndex);
 
     const fileJamo = rowJamo.files[0];
     const bufferingJamo = fileJamo.arrayBuffer();
     const parsingJamo = bufferingJamo.then(parseSCSV, fail);
     const readingJamo = parsingJamo.then(readJamo, fail);
-    const addingJamo = readingJamo.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingJamo);
+    arrReading.push(readingJamo);
 /*
     const fileNamesList = rowNamesList.files[0];
     const bufferingNamesList = fileNamesList.arrayBuffer();
     const parsingNamesList = bufferingNamesList.then(parseSCSV, fail);
     const readingNamesList = parsingNamesList.then(readNamesList, fail);
-    const addingNamesList = readingNamesList.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingNamesList);
+    arrReading.push(readingNamesList);
 */
     const filePropList = rowPropList.files[0];
     const bufferingPropList = filePropList.arrayBuffer();
     const parsingPropList = bufferingPropList.then(parseLines, fail);
     const readingPropList = parsingPropList.then(readPropList, fail);
-    const addingPropList = readingPropList.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingPropList);
+    arrReading.push(readingPropList);
 
     const fileProps = rowProps.files[0];
     const bufferingProps = fileProps.arrayBuffer();
     const parsingProps = bufferingProps.then(parseSCSV, fail);
     const readingProps = parsingProps.then(readProps, fail);
-    const addingProps = readingProps.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingProps);
+    arrReading.push(readingProps);
 
     const fileUnicodeData = rowUnicodeData.files[0];
     const bufferingUnicodeData = fileUnicodeData.arrayBuffer();
     const parsingUnicodeData = bufferingUnicodeData.then(parseSCSV, fail);
     const readingUnicodeData = parsingUnicodeData.then(readUnicodeData, fail);
-    const addingUnicodeData = readingUnicodeData.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingUnicodeData);
+    arrReading.push(readingUnicodeData);
     
     const fileUnihan = rowUnihan.files[0];
     const bufferingUnihan = fileUnihan.arrayBuffer();
     const parsingUnihan = bufferingUnihan.then(parseSCSV, fail);
     const readingUnihan = parsingUnihan.then(readUnihan, fail);
-    const addingUnihan = readingUnihan.then(function (str) { strModule += str; }, fail);
-    arrAdding.push(addingUnihan);
+    arrReading.push(readingUnihan);
         
-    const saving = Promise.all(arrAdding).then(save, fail);
+    const saving = Promise.all(arrReading).then(save, fail);
   });
 }
 
@@ -899,7 +890,7 @@ function getGeneralCategory(rows) {
   }
 }
 
-function save(str) {
+function save(arrStr) {
   console.log("saving");
   let header = "/*\n"
     + "(c) 2022 Scot Watson  All Rights Reserved\n"
@@ -907,7 +898,7 @@ function save(str) {
     + "*/\n"
     + "\n"
     + "export const characterData = ";
-  const blob = new Blob( [ header, str ] );
+  const blob = new Blob( [ header, ...arrStr ] );
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
