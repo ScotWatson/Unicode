@@ -187,6 +187,7 @@ function parseLines(buffer) {
       console.log(((pos / bufferView.byteLength) * 100) + "%");
     }
   }
+  return lines;
 }
 
 function readArabicShaping(rows) {
