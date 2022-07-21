@@ -268,7 +268,7 @@ function readNamesList(rows) {
 }
 
 function readPropList(lines) {
-  const strModule = "";
+  let strModule = "";
   let propList;
   let propLists = [];
   function createFunction() {
