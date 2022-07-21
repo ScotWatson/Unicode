@@ -93,7 +93,7 @@ function show20Update(container) {
   const btnCreateModule = document.createElement("button");
   container.appendChild(btnCreateModule);
   btnCreateModule.addEventListener("click", function (evt) {
-    const strModule = "";
+    let strModule = "";
     const arrAdding = [];
     
     const fileArabicShaping = rowArabicShaping.files[0];
@@ -133,7 +133,7 @@ function show20Update(container) {
 */
     const filePropList = rowPropList.files[0];
     const bufferingPropList = filePropList.arrayBuffer();
-    const parsingPropList = bufferingPropList.then(parsePropList, fail);
+    const parsingPropList = bufferingPropList.then(parseLines, fail);
     const readingPropList = parsingPropList.then(readPropList, fail);
     const addingPropList = readingPropList.then(function (str) { strModule += str; }, fail);
     arrAdding.push(addingPropList);
