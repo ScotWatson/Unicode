@@ -91,6 +91,7 @@ function show20Update(container) {
   const rowUnicodeData = addFileRow(fileTable, "UnicodeData");
   const rowUnihan = addFileRow(fileTable, "Unihan");
   const btnCreateModule = document.createElement("button");
+  btnCreateModule.innerHTML = "Create Module";
   container.appendChild(btnCreateModule);
   btnCreateModule.addEventListener("click", function (evt) {
     let strModule = "";
@@ -751,6 +752,7 @@ function start( [ loadEvt, unicodeModule ] ) {
 }
 
 function fail(error) {
+  console.error(error);
   document.body.appendChild(document.createTextNode(error.message));
 }
 
