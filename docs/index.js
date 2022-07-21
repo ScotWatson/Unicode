@@ -263,9 +263,9 @@ function readPropList(lines) {
   let propList;
   let propLists = [];
   function createFunction() {
-    strModule += "export function property_" + propList.name + "(codePoint) {\n"
+    strModule += "export function property_" + propList.name.replaceAll(" ", "_") + "(cp) {\n"
       + "  const singleCodes = " + JSON.stringify(propList.singleCodes) + ";\n"
-      + "  return singleCodes.includes(codePoint)\n";
+      + "  return singleCodes.includes(cp)\n";
     for (const condition of propList.rangeConditions) {
       strModule += "    || " + condition;
     }
@@ -287,7 +287,7 @@ function readPropList(lines) {
       }
       propList = {};
       propList.value = parseInt(propNumberName[0], 16);
-      propList.name = propNumberName[1].substring(0, propNumberName[1].length - 2);
+      propList.name = propNumberName[1].substring(0, propNumberName[1].length - 1);
       propList.singleCodes = [];
       propList.rangeConditions = [];
       propLists.push(propList);
@@ -296,9 +296,10 @@ function readPropList(lines) {
       if (codePoints.length === 2) {
         startCode = parseInt(codePoints[0], 16);
         endCode = parseInt(codePoints[1], 16);
-        propList.rangeConditions.push("(codePoint >= " + startCode + " && codePoint <= " + endCode + ")\n");
+        propList.rangeConditions.push("(cp >= 0x" + startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + endCode.toString(16).padStart(6, "0") + ")\n");
       } else {
         code = parseInt(codePoints[0], 16);
+        propList.singleCodes.push(code);
       }
     }
   }
