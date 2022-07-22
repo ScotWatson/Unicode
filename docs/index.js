@@ -325,17 +325,94 @@ function readProps(rows) {
 }
 
 function readUnicodeData(rows) {
-  const arrUnicodeData = [];
+  const characterName = [];
+  const generalCategory = [];
+  const ccs = [];
+  const bidi = [];
+  const characterDecompositionMapping = [];
+  const decimalDigitValue = [];
+  const digitValue = [];
+  const numericValue = [];
+  const mirrored = [];
+  const oldUnicodeName = [];
+  const commentISO10646 = [];
+  const uppercaseMapping = [];
+  const lowercaseMapping = [];
+  const titlecaseMapping = [];
+  let codeValue;
   for (const row of rows) {
-    const objRow = {};
-    if (row.length >= 3) {
-      objRow.startCode = parseInt(row[1], 16);
-      objRow.endCode = parseInt(row[2], 16);
-      objRow.blockName = row[3];
+    if (row.length >= 15) {
+      // [0]  Code value (normative)
+      // Code value in 4-digit hexadecimal format.
+      codeValue = parseInt(row[0], 16);
+      // [1]  Character name (normative)
+      // These names match exactly the names published in Chapter 14 of the Unicode Standard, Version 3.0.
+      characterName[codeValue] = row[1];
+      // [2]  General Category (normative / informative)
+      // This is a useful breakdown into various "character types" which can be used as a default categorization in implementations. See below for a brief explanation.
+      generalCategory[codeValue] = row[2];
+      // [3]  Canonical Combining Classes (normative)
+      // The classes used for the Canonical Ordering Algorithm in the Unicode Standard. These classes are also printed in Chapter 4 of the Unicode Standard.
+      ccs[codeValue] = row[3];
+      // [4]  Bidirectional Category (normative)
+      // See the list below for an explanation of the abbreviations used in this field. These are the categories required by the Bidirectional Behavior Algorithm in the Unicode Standard. These categories are summarized in Chapter 3 of the Unicode Standard.
+      bidi[codeValue] = row[4];
+      // [5]  Character Decomposition Mapping (normative)
+      // In the Unicode Standard, not all of the mappings are full (maximal) decompositions. Recursive application of look-up for decompositions will, in all cases, lead to a maximal decomposition. The decomposition mappings match exactly the decomposition mappings published with the character names in the Unicode Standard.
+      characterDecompositionMapping[codeValue] = row[5];
+      // [6]  Decimal digit value (normative)
+      // This is a numeric field. If the character has the decimal digit property, as specified in Chapter 4 of the Unicode Standard, the value of that digit is represented with an integer value in this field
+      decimalDigitValue[codeValue] = parseInt(row[6], 10);
+      // [7]  Digit value (normative)
+      // This is a numeric field. If the character represents a digit, not necessarily a decimal digit, the value is here. This covers digits which do not form decimal radix forms, such as the compatibility superscript digits
+      digitValue[codeValue] = parseInt(row[7], 10);
+      // [8]  Numeric value (normative)
+      // This is a numeric field. If the character has the numeric property, as specified in Chapter 4 of the Unicode Standard, the value of that character is represented with an integer or rational number in this field. This includes fractions as, e.g., "1/5" for U+2155 VULGAR FRACTION ONE FIFTH Also included are numerical values for compatibility characters such as circled numbers.
+      numericValue[codeValue] = parseInt(row[8], 10);
+      // [9]  Mirrored (normative)
+      // If the character has been identified as a "mirrored" character in bidirectional text, this field has the value "Y"; otherwise "N". The list of mirrored characters is also printed in Chapter 4 of the Unicode Standard.
+      switch (row[9]) {
+        case "Y":
+          mirrored[codeValue] = true;
+          break;
+        case "N":
+          mirrored[codeValue] = false;
+          break;
+        default:
+          throw new Error("mirrored value invalid");
+          break;
+      };
+      // [10] Unicode 1.0 Name (informative)
+      // This is the old name as published in Unicode 1.0. This name is only provided when it is significantly different from the Unicode 3.0 name for the character.
+      oldUnicodeName[codeValue] = row[10];
+      // [11] 10646 comment field (informative)
+      // This is the ISO 10646 comment field. It is in parantheses in the 10646 names list.
+      commentISO10646[codeValue] = row[11];
+      // [12] Uppercase Mapping (informative)
+      // Upper case equivalent mapping. If a character is part of an alphabet with case distinctions, and has an upper case equivalent, then the upper case equivalent is in this field. See the explanation below on case distinctions. These mappings are always one-to-one, not one-to-many or many-to-one. This field is informative.
+      uppercaseMapping[codeValue] = row[12];
+      // [13] Lowercase Mapping (informative)
+      // Lower case equivalent mapping. If a character is part of an alphabet with case distinctions, and has an lower case equivalent, then the lower case equivalent is in this field. See the explanation below on case distinctions. These mappings are always one-to-one, not one-to-many or many-to-one. This field is informative.
+      lowercaseMapping[codeValue] = row[13];
+      // [14] Titlecase Mapping (informative)
+      // Title case equivalent mapping. If a character is part of an alphabet with case distinctions, and has an title case equivalent, then the title case equivalent is in this field. See the explanation below on case distinctions. These mappings are always one-to-one, not one-to-many or many-to-one. This field is informative.
+      titlecaseMapping[codeValue] = row[14];
     }
-    arrUnicodeData.push(objRow);
   }
-  return "const arrUnicodeData = " + JSON.stringify(arrUnicodeData) + ";\n";
+  return "export const characterName = [" + JSON.stringify(characterName) + "];\n"
+    + "export const generalCategory = [" + JSON.stringify(generalCategory) + "];\n"
+    + "export const ccs = [" + JSON.stringify(ccs) + "];\n"
+    + "export const bidi = [" + JSON.stringify(bidi) + "];\n"
+    + "export const characterDecompositionMapping = [" + JSON.stringify(characterDecompositionMapping) + "];\n"
+    + "export const decimalDigitValue = [" + JSON.stringify(decimalDigitValue) + "];\n"
+    + "export const digitValue = [" + JSON.stringify(digitValue) + "];\n"
+    + "export const numericValue = [" + JSON.stringify(numericValue) + "];\n"
+    + "export const mirrored = [" + JSON.stringify(mirrored) + "];\n"
+    + "export const oldUnicodeName = [" + JSON.stringify(oldUnicodeName) + "];\n"
+    + "export const commentISO10646 = [" + JSON.stringify(commentISO10646) + "];\n"
+    + "export const uppercaseMapping = [" + JSON.stringify(uppercaseMapping) + "];\n"
+    + "export const lowercaseMapping = [" + JSON.stringify(lowercaseMapping) + "];\n"
+    + "export const titlecaseMapping = [" + JSON.stringify(titlecaseMapping) + "];\n";
 }
 
 function readUnihan(rows) {
