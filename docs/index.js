@@ -147,7 +147,7 @@ function show20Update(container) {
     
     const fileUnihan = rowUnihan.files[0];
     const bufferingUnihan = fileUnihan.arrayBuffer();
-    const parsingUnihan = bufferingUnihan.then(parseSCSV, fail);
+    const parsingUnihan = bufferingUnihan.then(parseTSV, fail);
     const readingUnihan = parsingUnihan.then(readUnihan, fail);
     arrReading.push(readingUnihan);
         
@@ -399,20 +399,20 @@ function readUnicodeData(rows) {
       titlecaseMapping[codeValue] = row[14];
     }
   }
-  return "export const characterName = [" + JSON.stringify(characterName) + "];\n"
-    + "export const generalCategory = [" + JSON.stringify(generalCategory) + "];\n"
-    + "export const ccs = [" + JSON.stringify(ccs) + "];\n"
-    + "export const bidi = [" + JSON.stringify(bidi) + "];\n"
-    + "export const characterDecompositionMapping = [" + JSON.stringify(characterDecompositionMapping) + "];\n"
-    + "export const decimalDigitValue = [" + JSON.stringify(decimalDigitValue) + "];\n"
-    + "export const digitValue = [" + JSON.stringify(digitValue) + "];\n"
-    + "export const numericValue = [" + JSON.stringify(numericValue) + "];\n"
-    + "export const mirrored = [" + JSON.stringify(mirrored) + "];\n"
-    + "export const oldUnicodeName = [" + JSON.stringify(oldUnicodeName) + "];\n"
-    + "export const commentISO10646 = [" + JSON.stringify(commentISO10646) + "];\n"
-    + "export const uppercaseMapping = [" + JSON.stringify(uppercaseMapping) + "];\n"
-    + "export const lowercaseMapping = [" + JSON.stringify(lowercaseMapping) + "];\n"
-    + "export const titlecaseMapping = [" + JSON.stringify(titlecaseMapping) + "];\n";
+  return "export const characterName = " + JSON.stringify(characterName) + ";\n"
+    + "export const generalCategory = " + JSON.stringify(generalCategory) + ";\n"
+    + "export const ccs = " + JSON.stringify(ccs) + ";\n"
+    + "export const bidi = " + JSON.stringify(bidi) + ";\n"
+    + "export const characterDecompositionMapping = " + JSON.stringify(characterDecompositionMapping) + ";\n"
+    + "export const decimalDigitValue = " + JSON.stringify(decimalDigitValue) + ";\n"
+    + "export const digitValue = " + JSON.stringify(digitValue) + ";\n"
+    + "export const numericValue = " + JSON.stringify(numericValue) + ";\n"
+    + "export const mirrored = " + JSON.stringify(mirrored) + ";\n"
+    + "export const oldUnicodeName = " + JSON.stringify(oldUnicodeName) + ";\n"
+    + "export const commentISO10646 = " + JSON.stringify(commentISO10646) + ";\n"
+    + "export const uppercaseMapping = " + JSON.stringify(uppercaseMapping) + ";\n"
+    + "export const lowercaseMapping = " + JSON.stringify(lowercaseMapping) + ";\n"
+    + "export const titlecaseMapping = " + JSON.stringify(titlecaseMapping) + ";\n";
 }
 
 function readUnihan(rows) {
@@ -456,7 +456,7 @@ function readUnihan(rows) {
   }
   let ret = "";
   for (const [name, value] of mapUnihan) {
-    ret += "export const " + name + " = [" + JSON.stringify(value) + "];\n"
+    ret += "export const " + name + " = " + JSON.stringify(value) + ";\n"
   }
   return ret;
 }
