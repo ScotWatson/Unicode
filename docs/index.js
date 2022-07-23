@@ -416,17 +416,49 @@ function readUnicodeData(rows) {
 }
 
 function readUnihan(rows) {
-  const arrUnihan = [];
+  const mapUnihan = new Map();
+  // Normative
+  mapUnihan.set("kBigFive", []);
+  mapUnihan.set("kCNS1986", []);
+  mapUnihan.set("kGB0", []);
+  mapUnihan.set("kGB1", []);
+  mapUnihan.set("kGB3", []);
+  mapUnihan.set("kGB5", []);
+  mapUnihan.set("kGB7", []);
+  mapUnihan.set("kGB8", []);
+  mapUnihan.set("kJis0", []);
+  mapUnihan.set("kJis1", []);
+  mapUnihan.set("kKSC0", []);
+  mapUnihan.set("kKSC1", []);
+  mapUnihan.set("kPseudoGB1", []);
+  // Informative
+  mapUnihan.set("kCCCII", []);
+  mapUnihan.set("kCNS1992", []);
+  mapUnihan.set("kDaeJaweon", []);
+  mapUnihan.set("kHanYu", []);
+  mapUnihan.set("kIBMJapan", []);
+  mapUnihan.set("kKangXi", []);
+  mapUnihan.set("kMorohashi", []);
+  mapUnihan.set("kXerox", []);
+  let firstCode;
   for (const row of rows) {
-    const objRow = {};
     if (row.length >= 3) {
-      objRow.startCode = parseInt(row[1], 16);
-      objRow.endCode = parseInt(row[2], 16);
-      objRow.blockName = row[3];
+      const code = parseInt(row[0].substring(2), 16);
+      if (!firstCode) {
+        firstCode = code;
+      }
+      const category = row[1];
+      const value = row[2];
+      if (mapUnihan.has(category)) {
+        mapUnihan.get(category)[code - firstCode] = value;
+      }
     }
-    arrUnihan.push(objRow);
   }
-  return "const arrUnihan = " + JSON.stringify(arrUnihan) + ";\n";
+  let ret = "";
+  for (const [name, value] of mapUnihan) {
+    ret += "export const " + name + " = [" + JSON.stringify(value) + "];\n"
+  }
+  return ret;
 }
 
 function show21Update(container) {
