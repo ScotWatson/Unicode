@@ -223,8 +223,7 @@ function parseLines(buffer) {
 
 function readArabicShaping(rows) {
   const objRet = {};
-  objRet.baseCodePoint;
-  const arrArabicShaping = [];
+  objRet.arrArabicShaping = [];
   for (const row of rows) {
     const objRow = {};
     const codePoint = parseInt(row[0], 16);
