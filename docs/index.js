@@ -242,6 +242,7 @@ function readArabicShaping(rows) {
 
 function readBlocks(rows) {
   const objRet = {};
+  objRet.arrBlocks = [];
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
