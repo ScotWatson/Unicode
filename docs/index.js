@@ -304,7 +304,8 @@ function readJamo(rows) {
   const objRet = {};
   objRet.arrJamo = [];
   const headerRow = rows.shift();
-  if ((headerRow[0] !== "#Value") || (headerRow[1] !== " Short Name") || (headerRow[2] !== " Unicode Name")) {
+  if ((headerRow[0].trim() !== "#Value") || (headerRow[1].trim() !== "Short Name") || (headerRow[2].trim() !== "Unicode Name")) {
+    console.warn(headerRow[0].trim(), headerRow[1].trim(), headerRow[2].trim());
     throw new Error("Jamo: Bad Header");
   }
   for (const row of rows) {
