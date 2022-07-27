@@ -135,7 +135,7 @@ function show20Update(container) {
 
     const fileProps = rowProps.files[0];
     const bufferingProps = fileProps.arrayBuffer();
-    const parsingProps = bufferingProps.then(parseSCSV, fail);
+    const parsingProps = bufferingProps.then(parseLines, fail);
     const readingProps = parsingProps.then(readProps, fail);
     arrReading.push(readingProps);
 
@@ -153,11 +153,16 @@ function show20Update(container) {
         
     const saving = Promise.all(arrReading).then(function ( [ objArabicShaping, objBlocks, objIndex, objJamo, /* objNamesList, */  objPropList, objProps, objUnicodeData, objUnihan ] ) {
       ret = "";
+      console.log("ArabicShaping");
       ret += "const arrArabicShaping = " + JSON.stringify(objArabicShaping.arrArabicShaping) + ";\n"
         + "const baseCodePointArabicShaping = " + JSON.stringify(objArabicShaping.baseCodePoint) + ";\n";
+      console.log("Blocks");
       ret += "const arrBlocks = " + JSON.stringify(objBlocks.arrBlocks) + ";\n";
+      console.log("Index");
       ret += "const arrIndex = " + JSON.stringify(objIndex.arrIndex) + ";\n";
+      console.log("Jamo");
       ret += "const arrJamo = " + JSON.stringify(objJamo.arrJamo) + ";\n";
+      console.log("PropList");
       for (const propList of objPropList.propLists) {
         ret += "export function property_" + propList.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
           + "  const singleCodes = " + JSON.stringify(propList.singleCodes) + ";\n"
@@ -170,7 +175,32 @@ function show20Update(container) {
         delete propList.rangeConditions;
       }
       ret += "export const propLists = " + JSON.stringify(objPropList.propLists) + ";\n";
-      ret += "const arrProps = " + JSON.stringify(objProps.arrProps) + ";\n";
+      console.log("Props");
+      for (const prop of objProps.arrProps) {
+        ret += "export function property_" + prop.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
+          + "  const singleCodes = ["
+        for (const code of prop.singleCodes) {
+          if (objUnicodeData.characterName[code.code] !== code.codeName) {
+            console.warn("Name mismatch:", objUnicodeData.characterName[code.code], code.codeName);
+          }
+          ret += "0x" + code.code.toString(16).padStart(6, "0") + ",";
+        }
+        ret += "];\n"
+        ret += "  return singleCodes.includes(cp)\n";
+        for (const condition of prop.rangeConditions) {
+          if (objUnicodeData.characterName[condition.startCode] !== condition.startCodeName) {
+            console.warn("Name mismatch:", objUnicodeData.characterName[code.code], code.codeName);
+          }
+          if (objUnicodeData.characterName[condition.endCode] !== condition.endCodeName) {
+            console.warn("Name mismatch:", objUnicodeData.characterName[code.code], code.codeName);
+          }
+          ret += "    || " + "(cp >= 0x" + condition.startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + condition.endCode.toString(16).padStart(6, "0") + ")\n";
+        }
+        ret += "}\n";
+        delete propList.singleCodes;
+        delete propList.rangeConditions;
+      }
+      console.log("UnicodeData");
       ret += "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
         + "export const generalCategory = " + JSON.stringify(objUnicodeData.generalCategory) + ";\n"
         + "export const ccs = " + JSON.stringify(objUnicodeData.ccs) + ";\n"
@@ -185,6 +215,7 @@ function show20Update(container) {
         + "export const uppercaseMapping = " + JSON.stringify(objUnicodeData.uppercaseMapping) + ";\n"
         + "export const lowercaseMapping = " + JSON.stringify(objUnicodeData.lowercaseMapping) + ";\n"
         + "export const titlecaseMapping = " + JSON.stringify(objUnicodeData.titlecaseMapping) + ";\n";
+      console.log("Unihan");
       for (const [name, value] of objUnihan.mapUnihan) {
         ret += "export const " + name + " = " + JSON.stringify(value) + ";\n"
       }
@@ -341,15 +372,55 @@ function readPropList(lines) {
 function readProps(rows) {
   const objRet = {};
   objRet.arrProps = [];
+  let prop;
+  let objRow = {};
+  let expectContinuation = false;
   for (const row of rows) {
-    const objRow = {};
-    if (row.length >= 3) {
-      objRow.startCode = parseInt(row[1], 16);
-      objRow.endCode = parseInt(row[2], 16);
-      objRow.blockName = row[3];
+    if (row.startsWith("#")) {
+      if (prop) {
+        objRet.arrProps.push(prop);
+      }
+      prop = {};
+      prop.name = row.substring(2).trim();
+      prop.singleCodes = [];
+      prop.rangeConditions = [];
+    } else {
+      objRow = {};
+      const codes = row.substring(0, 11).trim();
+      const codeName = row.substring(11);
+      if (codes === "") {
+        if (!expectContinuation) {
+          throw new Error("props: Unexpected Continuation");
+        }
+        objRow.endCodeName = codeName;
+        prop.rangeConditions.push(objRow);
+      } else {
+        if (expectContinuation) {
+          throw new Error("props: Expected Continuation");
+        }
+        const arrCodes = codes.split("..");
+        switch (arrCodes.length) {
+          case 1:
+            objRow.code = parseInt(arrCodes[0], 16);
+            objRow.codeName = codeName;
+            prop.singleCodes.push(objRow);
+            break;
+          case 2:
+            if (!codeName.endsWith("..")) {
+              throw new Error("props: Expected ..");
+            }
+            objRow.startCode = parseInt(arrCodes[0], 16);
+            objRow.endCode = parseInt(arrCodes[1], 16);
+            objRow.startCodeName = codeName;
+            break;
+          default:
+            throw new Error("props: Unexpected Codes");
+            break;
+        }
+      }
     }
-    objRet.arrProps.push(objRow);
   }
+  objRet.arrProps.push(prop);
   return objRet;
 }
 
