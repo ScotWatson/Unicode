@@ -272,12 +272,16 @@ function readIndex(rows) {
 function readJamo(rows) {
   const objRet = {};
   objRet.arrJamo = [];
+  const headerRow = rows.shift();
+  if ((headerRow[0] !== "#Value") || (headerRow[1] !== " Short Name") || (headerRow[2] !== " Unicode Name")) {
+    throw new Error("Jamo: Bad Header");
+  }
   for (const row of rows) {
     const objRow = {};
     if (row.length >= 3) {
       objRow.code = parseInt(row[0].substring(2), 16);
-      objRow.shortName = row[1];
-      objRow.unicodeName = row[2];
+      objRow.shortName = row[1].trim();
+      objRow.unicodeName = row[2].trim();
     }
     objRet.arrJamo.push(objRow);
   }
