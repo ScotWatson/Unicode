@@ -245,9 +245,11 @@ function parseLines(buffer) {
         break;
     }
     ++pos;
+/*
     if (pos % 1000 === 0) {
       console.log(((pos / bufferView.byteLength) * 100) + "%");
     }
+*/
   }
   return lines;
 }
@@ -997,9 +999,11 @@ function parseSCSV(buffer) {
       }
     }
     ++pos;
+/*
     if (pos % 1000 === 0) {
       console.log(((pos / bufferView.byteLength) * 100) + "%");
     }
+*/
   }
   return rows;
 }
