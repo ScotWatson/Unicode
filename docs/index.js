@@ -1037,9 +1037,11 @@ function parseTSV(buffer) {
         break;
     }
     ++pos;
+/*
     if (pos % 1000 === 0) {
       console.log(((pos / bufferView.byteLength) * 100) + "%");
     }
+*/
   }
   return rows;
 }
