@@ -303,6 +303,12 @@ function readIndex(rows) {
 function readJamo(rows) {
   const objRet = {};
   objRet.arrJamo = [];
+  for (let i = 0; i < 5; ++i) {
+    console.log("row", i);
+    for (const field of rows[i]) {
+      console.log(field);
+    }
+  }
   const headerRow = rows.shift();
   if ((headerRow[0].trim() !== "#Value") || (headerRow[1].trim() !== "Short Name") || (headerRow[2].trim() !== "Unicode Name")) {
     console.warn(headerRow[0].trim(), headerRow[1].trim(), headerRow[2].trim());
