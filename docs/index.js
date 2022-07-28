@@ -402,6 +402,7 @@ function readProps(rows) {
         }
         objRow.endCodeName = codeName;
         prop.rangeConditions.push(objRow);
+        expectContinuation = false;
       } else {
         if (expectContinuation) {
           throw new Error("props: Expected Continuation");
@@ -420,6 +421,7 @@ function readProps(rows) {
             objRow.startCode = parseInt(arrCodes[0], 16);
             objRow.endCode = parseInt(arrCodes[1], 16);
             objRow.startCodeName = codeName;
+            expectContinuation = true;
             break;
           default:
             throw new Error("props: Unexpected Codes");
