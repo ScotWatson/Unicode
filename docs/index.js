@@ -312,8 +312,7 @@ function readJamo(rows) {
     }
   }
   const headerRow = rows.shift();
-  if ((headerRow[0].trim() !== "#Value") || (headerRow[1].trim() !== "Short Name") || (headerRow[2].trim() !== "Unicode Name")) {
-    console.warn(headerRow[0].trim(), headerRow[1].trim(), headerRow[2].trim());
+  if (headerRow[1].trim() !== "#Value; Short Name; Unicode Name") {
     throw new Error("Jamo: Bad Header");
   }
   for (const row of rows) {
@@ -968,6 +967,7 @@ function parseSCSV(buffer) {
         case 0x0D:  // CR
           // end of row
           comment = false;
+          row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
           rows.push(row);
           row = [];
           break;
@@ -986,7 +986,7 @@ function parseSCSV(buffer) {
           break;
         case 0x23:  // "#"
           row.push(utf8decoder.decode(new Uint8Array(buffer, columnStart, pos - columnStart)));
-          columnStart = pos + 1;
+          columnStart = pos;
           comment = true;
           break;
         case 0x3B:  // ";"
