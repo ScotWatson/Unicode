@@ -396,16 +396,16 @@ function readProps(rows) {
       objRow = {};
       const codes = row.substring(0, 11).trim();
       const codeName = row.substring(11);
-      if (codes === "") {
-        if (!expectContinuation) {
-          throw new Error("props: Unexpected Continuation");
+      if (expectContinuation) {
+        if (codes !== "") {
+          throw new Error("props: Expected Continuation");
         }
         objRow.endCodeName = codeName;
         prop.rangeConditions.push(objRow);
         expectContinuation = false;
       } else {
-        if (expectContinuation) {
-          throw new Error("props: Expected Continuation");
+        if (codes === "") {
+          throw new Error("props: Unexpected Continuation");
         }
         const arrCodes = codes.split("..");
         switch (arrCodes.length) {
