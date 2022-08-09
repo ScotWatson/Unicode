@@ -423,7 +423,7 @@ function readProps(rows) {
             }
             objRow.startCode = parseInt(arrCodes[0], 16);
             objRow.endCode = parseInt(arrCodes[1], 16);
-            objRow.startCodeName = codeName;
+            objRow.startCodeName = codeName.substring(0, codeName.length - 2);
             expectContinuation = true;
             break;
           default:
