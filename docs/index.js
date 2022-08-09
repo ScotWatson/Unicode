@@ -189,10 +189,10 @@ function show20Update(container) {
         ret += "  return singleCodes.includes(cp)\n";
         for (const condition of prop.rangeConditions) {
           if (objUnicodeData.characterName[condition.startCode] !== condition.startCodeName) {
-            console.warn("Name mismatch:", objUnicodeData.characterName[code.code], code.codeName);
+            console.warn("Name mismatch:", objUnicodeData.characterName[condition.startCode], condition.startCodeName);
           }
           if (objUnicodeData.characterName[condition.endCode] !== condition.endCodeName) {
-            console.warn("Name mismatch:", objUnicodeData.characterName[code.code], code.codeName);
+            console.warn("Name mismatch:", objUnicodeData.characterName[condition.endCode], condition.endCodeName);
           }
           ret += "    || " + "(cp >= 0x" + condition.startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + condition.endCode.toString(16).padStart(6, "0") + ")\n";
         }
