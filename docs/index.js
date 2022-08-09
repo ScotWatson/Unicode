@@ -396,7 +396,6 @@ function readProps(rows) {
       prop.singleCodes = [];
       prop.rangeConditions = [];
     } else {
-      objRow = {};
       const codes = row.substring(0, 11).trim();
       const codeName = row.substring(11);
       if (expectContinuation) {
@@ -407,6 +406,7 @@ function readProps(rows) {
         prop.rangeConditions.push(objRow);
         expectContinuation = false;
       } else {
+        objRow = {};
         if (codes === "") {
           throw new Error("props: Unexpected Continuation");
         }
