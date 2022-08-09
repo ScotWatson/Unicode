@@ -405,7 +405,7 @@ function readProps(rows) {
         expectContinuation = false;
       } else {
         if (codes === "") {
-          throw new Error("props: Unexpected Continuation");
+          throw new Error("props: Unexpected Continuation \"" + row + "\"");
         }
         const arrCodes = codes.split("..");
         switch (arrCodes.length) {
