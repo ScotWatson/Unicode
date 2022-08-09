@@ -197,8 +197,8 @@ function show20Update(container) {
           ret += "    || " + "(cp >= 0x" + condition.startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + condition.endCode.toString(16).padStart(6, "0") + ")\n";
         }
         ret += "}\n";
-        delete propList.singleCodes;
-        delete propList.rangeConditions;
+        delete prop.singleCodes;
+        delete prop.rangeConditions;
       }
       console.log("UnicodeData");
       ret += "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
