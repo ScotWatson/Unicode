@@ -384,6 +384,9 @@ function readProps(rows) {
   let objRow = {};
   let expectContinuation = false;
   for (const row of rows) {
+    if (row === "") {
+      continue;
+    }
     if (row.startsWith("#")) {
       if (prop) {
         objRet.arrProps.push(prop);
@@ -405,7 +408,7 @@ function readProps(rows) {
         expectContinuation = false;
       } else {
         if (codes === "") {
-          throw new Error("props: Unexpected Continuation \"" + row + "\"");
+          throw new Error("props: Unexpected Continuation");
         }
         const arrCodes = codes.split("..");
         switch (arrCodes.length) {
