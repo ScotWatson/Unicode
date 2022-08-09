@@ -152,18 +152,18 @@ function show20Update(container) {
     arrReading.push(readingUnihan);
         
     const saving = Promise.all(arrReading).then(function ( [ objArabicShaping, objBlocks, objIndex, objJamo, /* objNamesList, */  objPropList, objProps, objUnicodeData, objUnihan ] ) {
-      const retArabicShaping = "";
+      let retArabicShaping = "";
       console.log("ArabicShaping");
       retArabicShaping += "const arrArabicShaping = " + JSON.stringify(objArabicShaping.arrArabicShaping) + ";\n"
         + "const baseCodePointArabicShaping = " + JSON.stringify(objArabicShaping.baseCodePoint) + ";\n";
       console.log("Blocks");
-      const retBlocks = "const arrBlocks = " + JSON.stringify(objBlocks.arrBlocks) + ";\n";
+      let retBlocks = "const arrBlocks = " + JSON.stringify(objBlocks.arrBlocks) + ";\n";
       console.log("Index");
-      const retIndex = "const arrIndex = " + JSON.stringify(objIndex.arrIndex) + ";\n";
+      let retIndex = "const arrIndex = " + JSON.stringify(objIndex.arrIndex) + ";\n";
       console.log("Jamo");
-      const retJamo = "const arrJamo = " + JSON.stringify(objJamo.arrJamo) + ";\n";
+      let retJamo = "const arrJamo = " + JSON.stringify(objJamo.arrJamo) + ";\n";
       console.log("PropList");
-      const retPropList = "";
+      let retPropList = "";
       for (const propList of objPropList.propLists) {
         retPropList += "export function property_" + propList.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
           + "  const singleCodes = " + JSON.stringify(propList.singleCodes) + ";\n"
@@ -177,7 +177,7 @@ function show20Update(container) {
       }
       retPropList += "export const propLists = " + JSON.stringify(objPropList.propLists) + ";\n";
       console.log("Props");
-      const retProps = "";
+      let retProps = "";
       for (const prop of objProps.arrProps) {
         retProps += "export function property_" + prop.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
           + "  const singleCodes = ["
@@ -203,7 +203,7 @@ function show20Update(container) {
         delete prop.rangeConditions;
       }
       console.log("UnicodeData");
-      const retUnicodeData = "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
+      let retUnicodeData = "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
         + "export const generalCategory = " + JSON.stringify(objUnicodeData.generalCategory) + ";\n"
         + "export const ccs = " + JSON.stringify(objUnicodeData.ccs) + ";\n"
         + "export const bidi = " + JSON.stringify(objUnicodeData.bidi) + ";\n"
@@ -218,7 +218,7 @@ function show20Update(container) {
         + "export const lowercaseMapping = " + JSON.stringify(objUnicodeData.lowercaseMapping) + ";\n"
         + "export const titlecaseMapping = " + JSON.stringify(objUnicodeData.titlecaseMapping) + ";\n";
       console.log("Unihan");
-      const retUnihan = "";
+      let retUnihan = "";
       for (const [name, value] of objUnihan.mapUnihan) {
         retUnihan += "export const " + name + " = " + JSON.stringify(value) + ";\n"
       }
