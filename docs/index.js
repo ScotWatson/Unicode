@@ -152,41 +152,43 @@ function show20Update(container) {
     arrReading.push(readingUnihan);
         
     const saving = Promise.all(arrReading).then(function ( [ objArabicShaping, objBlocks, objIndex, objJamo, /* objNamesList, */  objPropList, objProps, objUnicodeData, objUnihan ] ) {
-      ret = "";
+      const retArabicShaping = "";
       console.log("ArabicShaping");
-      ret += "const arrArabicShaping = " + JSON.stringify(objArabicShaping.arrArabicShaping) + ";\n"
+      retArabicShaping += "const arrArabicShaping = " + JSON.stringify(objArabicShaping.arrArabicShaping) + ";\n"
         + "const baseCodePointArabicShaping = " + JSON.stringify(objArabicShaping.baseCodePoint) + ";\n";
       console.log("Blocks");
-      ret += "const arrBlocks = " + JSON.stringify(objBlocks.arrBlocks) + ";\n";
+      const retBlocks = "const arrBlocks = " + JSON.stringify(objBlocks.arrBlocks) + ";\n";
       console.log("Index");
-      ret += "const arrIndex = " + JSON.stringify(objIndex.arrIndex) + ";\n";
+      const retIndex = "const arrIndex = " + JSON.stringify(objIndex.arrIndex) + ";\n";
       console.log("Jamo");
-      ret += "const arrJamo = " + JSON.stringify(objJamo.arrJamo) + ";\n";
+      const retJamo = "const arrJamo = " + JSON.stringify(objJamo.arrJamo) + ";\n";
       console.log("PropList");
+      const retPropList = "";
       for (const propList of objPropList.propLists) {
-        ret += "export function property_" + propList.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
+        retPropList += "export function property_" + propList.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
           + "  const singleCodes = " + JSON.stringify(propList.singleCodes) + ";\n"
           + "  return singleCodes.includes(cp)\n";
         for (const condition of propList.rangeConditions) {
-          ret += "    || " + "(cp >= 0x" + condition.startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + condition.endCode.toString(16).padStart(6, "0") + ")\n";
+          retPropList += "    || " + "(cp >= 0x" + condition.startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + condition.endCode.toString(16).padStart(6, "0") + ")\n";
         }
-        ret += "}\n";
+        retPropList += "}\n";
         delete propList.singleCodes;
         delete propList.rangeConditions;
       }
-      ret += "export const propLists = " + JSON.stringify(objPropList.propLists) + ";\n";
+      retPropList += "export const propLists = " + JSON.stringify(objPropList.propLists) + ";\n";
       console.log("Props");
+      const retProps = "";
       for (const prop of objProps.arrProps) {
-        ret += "export function property_" + prop.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
+        retProps += "export function property_" + prop.name.replaceAll(" ", "_").replaceAll("-", "_") + "(cp) {\n"
           + "  const singleCodes = ["
         for (const code of prop.singleCodes) {
           if (objUnicodeData.characterName[code.code] !== code.codeName) {
             console.warn("Name mismatch:", objUnicodeData.characterName[code.code], code.codeName);
           }
-          ret += "0x" + code.code.toString(16).padStart(6, "0") + ",";
+          retProps += "0x" + code.code.toString(16).padStart(6, "0") + ",";
         }
-        ret += "];\n"
-        ret += "  return singleCodes.includes(cp)\n";
+        retProps += "];\n"
+        retProps += "  return singleCodes.includes(cp)\n";
         for (const condition of prop.rangeConditions) {
           if (objUnicodeData.characterName[condition.startCode] !== condition.startCodeName) {
             console.warn("Name mismatch:", objUnicodeData.characterName[condition.startCode], condition.startCodeName);
@@ -194,14 +196,14 @@ function show20Update(container) {
           if (objUnicodeData.characterName[condition.endCode] !== condition.endCodeName) {
             console.warn("Name mismatch:", objUnicodeData.characterName[condition.endCode], condition.endCodeName);
           }
-          ret += "    || " + "(cp >= 0x" + condition.startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + condition.endCode.toString(16).padStart(6, "0") + ")\n";
+          retProps += "    || " + "(cp >= 0x" + condition.startCode.toString(16).padStart(6, "0") + " && cp <= 0x" + condition.endCode.toString(16).padStart(6, "0") + ")\n";
         }
-        ret += "}\n";
+        retProps += "}\n";
         delete prop.singleCodes;
         delete prop.rangeConditions;
       }
       console.log("UnicodeData");
-      ret += "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
+      const retUnicodeData = "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
         + "export const generalCategory = " + JSON.stringify(objUnicodeData.generalCategory) + ";\n"
         + "export const ccs = " + JSON.stringify(objUnicodeData.ccs) + ";\n"
         + "export const bidi = " + JSON.stringify(objUnicodeData.bidi) + ";\n"
@@ -216,10 +218,19 @@ function show20Update(container) {
         + "export const lowercaseMapping = " + JSON.stringify(objUnicodeData.lowercaseMapping) + ";\n"
         + "export const titlecaseMapping = " + JSON.stringify(objUnicodeData.titlecaseMapping) + ";\n";
       console.log("Unihan");
+      const retUnihan = "";
       for (const [name, value] of objUnihan.mapUnihan) {
-        ret += "export const " + name + " = " + JSON.stringify(value) + ";\n"
+        retUnihan += "export const " + name + " = " + JSON.stringify(value) + ";\n"
       }
-      return ret;
+      createSaveLink([ retArabicShaping ], "ArabicShaping");
+      createSaveLink([ retBlocks ], "Blocks");
+      createSaveLink([ retIndex ], "Index");
+      createSaveLink([ retJamo ], "Jamo");
+      createSaveLink([ retPropList ], "PropList");
+      createSaveLink([ retProps ], "Props");
+      createSaveLink([ retUnicodeData ], "UnicodeData");
+      createSaveLink([ retUnihan ], "Unihan");
+      return [ retArabicShaping, retBlocks, retIndex, retJamo, retPropList, retProps, retUnicodeData, retUnihan ];
     });
     saving.then(save, fail);
   });
@@ -1118,4 +1129,20 @@ function save(arrStr) {
   document.body.appendChild(a);
   a.click();
   a.remove();
+}
+
+function createSaveLink(arrStr, name) {
+  console.log("saving");
+  let header = "/*\n"
+    + "(c) 2022 Scot Watson  All Rights Reserved\n"
+    + "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n"
+    + "*/\n"
+    + "\n";
+  const blob = new Blob( [ header, ...arrStr ] );
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name + ".mjs";
+  a.innerHTML = "Click to Save";
+  document.body.appendChild(a);
 }
