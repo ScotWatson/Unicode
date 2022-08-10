@@ -219,6 +219,30 @@ function show20Update(container) {
         + "export const titlecaseMapping = " + JSON.stringify(objUnicodeData.titlecaseMapping) + ";\n";
       console.log("Unihan");
       let retUnihan = "";
+      if (objUnihan.mapUnihan.has("kBigFive")) {
+        objUnihan.mapUnihan.get("kBigFive");
+      }
+      "kBigFive", "Big5", "Big5"
+      "kCCCII", "CCCII", "CCCII"
+      "kCNS1986", "CNS 11643-1986", "CNS_11643_1986"
+      "kCNS1992", "CNS 11643-1992", "CNS_11643_1992"
+      "kEACC", "EACC", "EACC"
+      "kGB0", "GB 2312-80", "GB_2312_80"
+      "kGB1", "GB 12345-90", "GB_12345_90"
+      "kGB3", "GB 7589-87", "GB_7589_87"
+      "kGB5", "GB 7590-87", "GB_7590_87"
+      "kGB7", ""
+      "kGB8", "GB 8565-89", "GB_8565_89"
+      "kIBMJapan", "IBM Japanese", "IBM_Japanese"
+      "kJis0", "JIS X 0208-1990"
+      "kJis1", "JIS X 0212-1990"
+      "kKSC0", "KS C 5601-1989"
+      "kKSC1", "KS C 5657-1991"
+      "kMainlandTelegraph", "PRC Telegraph"
+      "kPseudoGB1"
+      "kTaiwanTelegraph", "TaiwanTelegraph"
+      "kXerox", "Xerox"
+      
       for (const [name, value] of objUnihan.mapUnihan) {
         retUnihan += "export const " + name + " = " + JSON.stringify(value) + ";\n"
       }
