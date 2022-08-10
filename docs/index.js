@@ -203,8 +203,9 @@ function show20Update(container) {
         delete prop.rangeConditions;
       }
       console.log("UnicodeData");
-      let retUnicodeData = "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
-        + "export const generalCategory = " + JSON.stringify(objUnicodeData.generalCategory) + ";\n"
+      let retUnicodeDataNames = "export const characterName = " + JSON.stringify(objUnicodeData.characterName) + ";\n"
+        + "export const oldUnicodeName = " + JSON.stringify(objUnicodeData.oldUnicodeName) + ";\n"
+      let retUnicodeDataOther = "export const generalCategory = " + JSON.stringify(objUnicodeData.generalCategory) + ";\n"
         + "export const ccs = " + JSON.stringify(objUnicodeData.ccs) + ";\n"
         + "export const bidi = " + JSON.stringify(objUnicodeData.bidi) + ";\n"
         + "export const characterDecompositionMapping = " + JSON.stringify(objUnicodeData.characterDecompositionMapping) + ";\n"
@@ -212,7 +213,6 @@ function show20Update(container) {
         + "export const digitValue = " + JSON.stringify(objUnicodeData.digitValue) + ";\n"
         + "export const numericValue = " + JSON.stringify(objUnicodeData.numericValue) + ";\n"
         + "export const mirrored = " + JSON.stringify(objUnicodeData.mirrored) + ";\n"
-        + "export const oldUnicodeName = " + JSON.stringify(objUnicodeData.oldUnicodeName) + ";\n"
         + "export const commentISO10646 = " + JSON.stringify(objUnicodeData.commentISO10646) + ";\n"
         + "export const uppercaseMapping = " + JSON.stringify(objUnicodeData.uppercaseMapping) + ";\n"
         + "export const lowercaseMapping = " + JSON.stringify(objUnicodeData.lowercaseMapping) + ";\n"
@@ -222,15 +222,17 @@ function show20Update(container) {
       for (const [name, value] of objUnihan.mapUnihan) {
         retUnihan += "export const " + name + " = " + JSON.stringify(value) + ";\n"
       }
-      createSaveLink([ retArabicShaping ], "ArabicShaping");
-      createSaveLink([ retBlocks ], "Blocks");
+      createSaveLink([ retArabicShaping, retBlocks, retJamo, retPropList, retProps ], "Codes");
+      document.body.appendChild(document.createElement("br"));
       createSaveLink([ retIndex ], "Index");
-      createSaveLink([ retJamo ], "Jamo");
-      createSaveLink([ retPropList ], "PropList");
-      createSaveLink([ retProps ], "Props");
-      createSaveLink([ retUnicodeData ], "UnicodeData");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ retUnicodeDataNames ], "UnicodeDataNames");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ retUnicodeDataOther ], "UnicodeDataOther");
+      document.body.appendChild(document.createElement("br"));
       createSaveLink([ retUnihan ], "Unihan");
-      return [ retArabicShaping, retBlocks, retIndex, retJamo, retPropList, retProps, retUnicodeData, retUnihan ];
+      document.body.appendChild(document.createElement("br"));
+      return [ retArabicShaping, retBlocks, retIndex, retJamo, retPropList, retProps, retUnicodeDataNames, retUnicodeDataOther, retUnihan ];
     });
     saving.then(save, fail);
   });
