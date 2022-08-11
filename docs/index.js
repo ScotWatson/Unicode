@@ -218,31 +218,149 @@ function show20Update(container) {
         + "export const lowercaseMapping = " + JSON.stringify(objUnicodeData.lowercaseMapping) + ";\n"
         + "export const titlecaseMapping = " + JSON.stringify(objUnicodeData.titlecaseMapping) + ";\n";
       console.log("Unihan");
-      let retUnihan = "";
+      let retBigFive = "";
       if (objUnihan.mapUnihan.has("kBigFive")) {
-        objUnihan.mapUnihan.get("kBigFive");
+        retBigFive = "export const kBigFive = " + JSON.stringify(objUnihan.mapUnihan.get("kBigFive")) + ";\n";
+        objUnihan.mapUnihan.delete("kBigFive");
       }
-      "kBigFive", "Big5", "Big5"
-      "kCCCII", "CCCII", "CCCII"
-      "kCNS1986", "CNS 11643-1986", "CNS_11643_1986"
-      "kCNS1992", "CNS 11643-1992", "CNS_11643_1992"
-      "kEACC", "EACC", "EACC"
-      "kGB0", "GB 2312-80", "GB_2312_80"
-      "kGB1", "GB 12345-90", "GB_12345_90"
-      "kGB3", "GB 7589-87", "GB_7589_87"
-      "kGB5", "GB 7590-87", "GB_7590_87"
-      "kGB7", ""
-      "kGB8", "GB 8565-89", "GB_8565_89"
-      "kIBMJapan", "IBM Japanese", "IBM_Japanese"
-      "kJis0", "JIS X 0208-1990"
-      "kJis1", "JIS X 0212-1990"
-      "kKSC0", "KS C 5601-1989"
-      "kKSC1", "KS C 5657-1991"
-      "kMainlandTelegraph", "PRC Telegraph"
-      "kPseudoGB1"
-      "kTaiwanTelegraph", "TaiwanTelegraph"
-      "kXerox", "Xerox"
-      
+      let retCCCII = "";
+      if (objUnihan.mapUnihan.has("kCCCII")) {
+        retCCCII = "export const kCCCII = " + JSON.stringify(objUnihan.mapUnihan.get("kCCCII")) + ";\n";
+        objUnihan.mapUnihan.delete("kCCCII");
+      }
+      let retCNS1986 = "";
+      if (objUnihan.mapUnihan.has("kCNS1986")) {
+        retCNS1986 = "export const kCNS1986 = " + JSON.stringify(objUnihan.mapUnihan.get("kCNS1986")) + ";\n";
+        objUnihan.mapUnihan.delete("kCNS1986");
+      }
+      let retCNS1992 = "";
+      if (objUnihan.mapUnihan.has("kCNS1992")) {
+        retCNS1992 = "export const kCNS1992 = " + JSON.stringify(objUnihan.mapUnihan.get("kCNS1992")) + ";\n";
+        objUnihan.mapUnihan.delete("kCNS1992");
+      }
+      let retEACC = "";
+      if (objUnihan.mapUnihan.has("kEACC")) {
+        retEACC = "export const kEACC = " + JSON.stringify(objUnihan.mapUnihan.get("kEACC")) + ";\n";
+        objUnihan.mapUnihan.delete("kEACC");
+      }
+      let retGB0 = "";
+      if (objUnihan.mapUnihan.has("kGB0")) {
+        retGB0 = "export const kGB0 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB0")) + ";\n";
+        objUnihan.mapUnihan.delete("kGB0");
+      }
+      let retGB1 = "";
+      if (objUnihan.mapUnihan.has("kGB1")) {
+        retGB1 = "export const kGB1 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB1")) + ";\n";
+        objUnihan.mapUnihan.delete("kGB1");
+      }
+      let retGB3 = "";
+      if (objUnihan.mapUnihan.has("kGB3")) {
+        retGB0 = "export const kGB3 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB3")) + ";\n";
+        objUnihan.mapUnihan.delete("kGB3");
+      }
+      let retGB5 = "";
+      if (objUnihan.mapUnihan.has("kGB5")) {
+        retGB5 = "export const kGB5 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB5")) + ";\n";
+        objUnihan.mapUnihan.delete("kGB5");
+      }
+      let retGB7 = "";
+      if (objUnihan.mapUnihan.has("kGB7")) {
+        retGB7 = "export const kGB7 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB7")) + ";\n";
+        objUnihan.mapUnihan.delete("kGB7");
+      }
+      let retGB8 = "";
+      if (objUnihan.mapUnihan.has("kGB8")) {
+        retGB8 = "export const kGB8 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB8")) + ";\n";
+        objUnihan.mapUnihan.delete("kGB8");
+      }
+      let retIBMJapan = "";
+      if (objUnihan.mapUnihan.has("kIBMJapan")) {
+        retIBMJapan = "export const kIBMJapan = " + JSON.stringify(objUnihan.mapUnihan.get("kIBMJapan")) + ";\n";
+        objUnihan.mapUnihan.delete("kIBMJapan");
+      }
+      let retJis0 = "";
+      if (objUnihan.mapUnihan.has("kJis0")) {
+        retJis0 = "export const kJis0 = " + JSON.stringify(objUnihan.mapUnihan.get("kJis0")) + ";\n";
+        objUnihan.mapUnihan.delete("kJis0");
+      }
+      let retJis1 = "";
+      if (objUnihan.mapUnihan.has("kJis1")) {
+        retJis1 = "export const kJis1 = " + JSON.stringify(objUnihan.mapUnihan.get("kJis1")) + ";\n";
+        objUnihan.mapUnihan.delete("kJis1");
+      }
+      let retKSC0 = "";
+      if (objUnihan.mapUnihan.has("kKSC0")) {
+        retKSC0 = "export const kKSC0 = " + JSON.stringify(objUnihan.mapUnihan.get("kKSC0")) + ";\n";
+        objUnihan.mapUnihan.delete("kKSC0");
+      }
+      let retKSC1 = "";
+      if (objUnihan.mapUnihan.has("kKSC1")) {
+        retKSC1 = "export const kKSC1 = " + JSON.stringify(objUnihan.mapUnihan.get("kKSC1")) + ";\n";
+        objUnihan.mapUnihan.delete("kKSC1");
+      }
+      let retMainlandTelegraph = "";
+      if (objUnihan.mapUnihan.has("kMainlandTelegraph")) {
+        retMainlandTelegraph = "export const kMainlandTelegraph = " + JSON.stringify(objUnihan.mapUnihan.get("kMainlandTelegraph")) + ";\n";
+        objUnihan.mapUnihan.delete("kMainlandTelegraph");
+      }
+      let retPseudoGB1 = "";
+      if (objUnihan.mapUnihan.has("kPseudoGB1")) {
+        retPseudoGB1 = "export const kPseudoGB1 = " + JSON.stringify(objUnihan.mapUnihan.get("kPseudoGB1")) + ";\n";
+        objUnihan.mapUnihan.delete("kPseudoGB1");
+      }
+      let retTaiwanTelegraph = "";
+      if (objUnihan.mapUnihan.has("kTaiwanTelegraph")) {
+        retTaiwanTelegraph = "export const kTaiwanTelegraph = " + JSON.stringify(objUnihan.mapUnihan.get("kTaiwanTelegraph")) + ";\n";
+        objUnihan.mapUnihan.delete("kTaiwanTelegraph");
+      }
+      let retXerox = "";
+      if (objUnihan.mapUnihan.has("kXerox")) {
+        retXerox = "export const kXerox = " + JSON.stringify(objUnihan.mapUnihan.get("kXerox")) + ";\n";
+        objUnihan.mapUnihan.delete("kXerox");
+      }
+
+      createSaveLink([ kBigFive ], "Big5_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kCCCII ], "CCCII_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kCNS1986 ], "CNS_11643_1986_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kCNS1992 ], "CNS_11643_1992_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kEACC ], "EACC_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kGB0 ], "GB_2312_80_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kGB1 ], "GB_12345_90_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kGB3 ], "GB_7589_87_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kGB5 ], "GB_7590_87_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kGB7 ], "GB7_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kGB8 ], "GB_8565_89_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kIBMJapan ], "IBM_Japanese_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kJis0 ], "JIS_X_0208_1990_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kJis1 ], "JIS_X_0212_1990_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kKSC0 ], "KS_C_5601_1989_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kKSC1 ], "KS_C_5657_1991_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kMainlandTelegraph ], "PRC_Telegraph_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kPseudoGB1 ], "Pseudo_GB1_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kTaiwanTelegraph ], "Taiwan_Telegraph_Encoding");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ kXerox ], "Xerox_Encoding");
+      document.body.appendChild(document.createElement("br"));
+
+      let retUnihan = "";
       for (const [name, value] of objUnihan.mapUnihan) {
         retUnihan += "export const " + name + " = " + JSON.stringify(value) + ";\n"
       }
@@ -1169,6 +1287,6 @@ function createSaveLink(arrStr, name) {
   const a = document.createElement("a");
   a.href = url;
   a.download = name + ".mjs";
-  a.innerHTML = "Click to Save";
+  a.innerHTML = "Click to Save: " + name + ".mjs";
   document.body.appendChild(a);
 }
