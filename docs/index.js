@@ -688,7 +688,7 @@ function readUnihan(rows) {
   objRet.mapUnihan.set("kKSC0", []);
   objRet.mapUnihan.set("kKSC1", []);
   objRet.mapUnihan.set("kPseudoGB1", []);
-  // Informative
+  // Proofed
   objRet.mapUnihan.set("kCCCII", []);
   objRet.mapUnihan.set("kCNS1992", []);
   objRet.mapUnihan.set("kDaeJaweon", []);
@@ -697,6 +697,33 @@ function readUnihan(rows) {
   objRet.mapUnihan.set("kKangXi", []);
   objRet.mapUnihan.set("kMorohashi", []);
   objRet.mapUnihan.set("kXerox", []);
+  // Unproofed
+  objRet.mapUnihan.set("kAlternateHanYu", []);
+  objRet.mapUnihan.set("kAlternateKangXi", []);
+  objRet.mapUnihan.set("kAlternateMorohashi", []);
+  objRet.mapUnihan.set("kCantonese", []);
+  objRet.mapUnihan.set("kDefinition", []);
+  objRet.mapUnihan.set("kEACC", []);
+  objRet.mapUnihan.set("kJapaneseKun", []);
+  objRet.mapUnihan.set("kJapaneseOn", []);
+  objRet.mapUnihan.set("kKorean", []);
+  objRet.mapUnihan.set("kMainlandTelegraph", []);
+  objRet.mapUnihan.set("kMandarin", []);
+  objRet.mapUnihan.set("kMatthews", []);
+  objRet.mapUnihan.set("kNelson", []);
+  objRet.mapUnihan.set("kRSJapanese", []);
+  objRet.mapUnihan.set("kRSKanWa", []);
+  objRet.mapUnihan.set("kRSKangXi", []);
+  objRet.mapUnihan.set("kRSKorean", []);
+  objRet.mapUnihan.set("kRSUnicode", []);
+  objRet.mapUnihan.set("kSemanticVariant", []);
+  objRet.mapUnihan.set("kSimplifiedVariant", []);
+  objRet.mapUnihan.set("kSpecializedSemanticVariant", []);
+  objRet.mapUnihan.set("kTaiwanTelegraph", []);
+  objRet.mapUnihan.set("kTang", []);
+  objRet.mapUnihan.set("kTraditionalVariant", []);
+  objRet.mapUnihan.set("kZVariant", []);
+
   let firstCode;
   for (const row of rows) {
     if (row.length >= 3) {
