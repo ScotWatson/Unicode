@@ -727,14 +727,15 @@ function readUnihan(rows) {
     }
     const category = row[1];
     const value = row[2];
-    if (objRet.mapUnihan.has(category)) {
-      objRet.mapUnihan.get(category)[code - firstCode] = value;
-      if (category === "kGB3") {
-        console.log(category, value);
-      }
-    } else {
+    if (!objRet.mapUnihan.has(category)) {
       console.warn("Category Not Found: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
+      continue;
     }
+    if (objRet.mapUnihan.get(category)[code - firstCode] !== null) {
+      console.warn("Entry already recorded: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
+      continue;
+    }
+    objRet.mapUnihan.get(category)[code - firstCode] = value;
   }
   return objRet;
 }
