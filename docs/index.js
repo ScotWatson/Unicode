@@ -728,7 +728,7 @@ function readUnihan(rows) {
           console.log(category, value);
         }
       } else {
-        console.warn("Category Not Found: \"" + category + "\" code: " + code.toString(16));
+        console.warn("Category Not Found: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
       }
     }
   }
