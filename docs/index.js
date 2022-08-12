@@ -727,12 +727,17 @@ function readUnihan(rows) {
     }
     const category = row[1];
     const value = row[2];
-    if (!objRet.mapUnihan.has(category)) {
+    const array = objRet.mapUnihan.get(category);
+    if (!array) {
       console.warn("Category Not Found: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
       continue;
     }
-    if (objRet.mapUnihan.get(category)[code - firstCode] !== undefined) {
-      console.warn("Entry already recorded: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
+    if (array[code - firstCode] !== undefined) {
+      if (array[code - firstCode] === value) {
+        console.warn("Same value in entry: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
+      } else {
+        console.error("Different value in entry: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
+      }
       continue;
     }
     objRet.mapUnihan.get(category)[code - firstCode] = value;
