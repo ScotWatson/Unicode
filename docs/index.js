@@ -318,6 +318,41 @@ function show20Update(container) {
         retXerox = "export const kXerox = " + JSON.stringify(objUnihan.mapUnihan.get("kXerox")) + ";\n";
         objUnihan.mapUnihan.delete("kXerox");
       }
+      let retCantonese = "";
+      if (objUnihan.mapUnihan.has("kCantonese")) {
+        retCantonese = "export const kCantonese = " + JSON.stringify(objUnihan.mapUnihan.get("kCantonese")) + ";\n";
+        objUnihan.mapUnihan.delete("kCantonese");
+      }
+      let retKorean = "";
+      if (objUnihan.mapUnihan.has("kKorean")) {
+        retKorean = "export const kKorean = " + JSON.stringify(objUnihan.mapUnihan.get("kKorean")) + ";\n";
+        objUnihan.mapUnihan.delete("kKorean");
+      }
+      let retMandarin = "";
+      if (objUnihan.mapUnihan.has("kMandarin")) {
+        retMandarin = "export const kMandarin = " + JSON.stringify(objUnihan.mapUnihan.get("kMandarin")) + ";\n";
+        objUnihan.mapUnihan.delete("kMandarin");
+      }
+      let retSemanticVariant = "";
+      if (objUnihan.mapUnihan.has("kSemanticVariant")) {
+        retSemanticVariant = "export const kSemanticVariant = " + JSON.stringify(objUnihan.mapUnihan.get("kSemanticVariant")) + ";\n";
+        objUnihan.mapUnihan.delete("kSemanticVariant");
+      }
+      let retSimplifiedVariant = "";
+      if (objUnihan.mapUnihan.has("kSimplifiedVariant")) {
+        retSimplifiedVariant = "export const kSimplifiedVariant = " + JSON.stringify(objUnihan.mapUnihan.get("kSimplifiedVariant")) + ";\n";
+        objUnihan.mapUnihan.delete("kSimplifiedVariant");
+      }
+      let retSpecializedSemanticVariant = "";
+      if (objUnihan.mapUnihan.has("kSpecializedSemanticVariant")) {
+        retSpecializedSemanticVariant = "export const kSpecializedSemanticVariant = " + JSON.stringify(objUnihan.mapUnihan.get("kSpecializedSemanticVariant")) + ";\n";
+        objUnihan.mapUnihan.delete("kSpecializedSemanticVariant");
+      }
+      let retZVariant = "";
+      if (objUnihan.mapUnihan.has("kZVariant")) {
+        retZVariant = "export const kZVariant = " + JSON.stringify(objUnihan.mapUnihan.get("kZVariant")) + ";\n";
+        objUnihan.mapUnihan.delete("kZVariant");
+      }
 
       createSaveLink([ retBigFive ], "Big5_Encoding");
       document.body.appendChild(document.createElement("br"));
@@ -359,12 +394,18 @@ function show20Update(container) {
       document.body.appendChild(document.createElement("br"));
       createSaveLink([ retXerox ], "Xerox_Encoding");
       document.body.appendChild(document.createElement("br"));
+      createSaveLink([ retCantonese ], "Cantonese_Pronunciation");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ retKorean ], "Korean_Pronunciation");
+      document.body.appendChild(document.createElement("br"));
+      createSaveLink([ retMandarin ], "Mandarin_Pronunciation");
+      document.body.appendChild(document.createElement("br"));
 
       let retUnihan = "";
       for (const [name, value] of objUnihan.mapUnihan) {
         retUnihan += "export const " + name + " = " + JSON.stringify(value) + ";\n"
       }
-      createSaveLink([ retArabicShaping, retBlocks, retJamo, retPropList, retProps ], "Codes");
+      createSaveLink([ retArabicShaping, retBlocks, retJamo, retPropList, retProps, retSemanticVariant, retSimplifiedVariant, retSpecializedSemanticVariant, retZVariant ], "Codes");
       document.body.appendChild(document.createElement("br"));
       createSaveLink([ retIndex ], "Index");
       document.body.appendChild(document.createElement("br"));
@@ -736,7 +777,7 @@ function readUnihan(rows) {
       if (array[code - firstCode] === value) {
         console.warn("Same value in entry: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
       } else {
-        console.error("Different value in entry: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
+        throw new Error("Different value in entry: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
       }
       continue;
     }
