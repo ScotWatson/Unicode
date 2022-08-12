@@ -715,21 +715,25 @@ function readUnihan(rows) {
 
   let firstCode;
   for (const row of rows) {
-    if (row.length >= 3) {
-      const code = parseInt(row[0].substring(2), 16);
-      if (!firstCode) {
-        firstCode = code;
+    if (row.length < 3) {
+      continue;
+    }
+    if (row[0].startsWith("#")) {
+      continue;
+    }
+    const code = parseInt(row[0].substring(2), 16);
+    if (!firstCode) {
+      firstCode = code;
+    }
+    const category = row[1];
+    const value = row[2];
+    if (objRet.mapUnihan.has(category)) {
+      objRet.mapUnihan.get(category)[code - firstCode] = value;
+      if (category === "kGB3") {
+        console.log(category, value);
       }
-      const category = row[1];
-      const value = row[2];
-      if (objRet.mapUnihan.has(category)) {
-        objRet.mapUnihan.get(category)[code - firstCode] = value;
-        if (category === "kGB3") {
-          console.log(category, value);
-        }
-      } else {
-        console.warn("Category Not Found: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
-      }
+    } else {
+      console.warn("Category Not Found: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
     }
   }
   return objRet;
