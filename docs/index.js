@@ -731,7 +731,7 @@ function readUnihan(rows) {
       console.warn("Category Not Found: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
       continue;
     }
-    if (objRet.mapUnihan.get(category)[code - firstCode] !== null) {
+    if (objRet.mapUnihan.get(category)[code - firstCode] !== undefined) {
       console.warn("Entry already recorded: \"" + row[0] + "\" \"" + row[1] + "\" \"" + row[2] + "\"");
       continue;
     }
