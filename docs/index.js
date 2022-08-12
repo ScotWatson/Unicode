@@ -400,11 +400,6 @@ function parseLines(buffer) {
         break;
     }
     ++pos;
-/*
-    if (pos % 1000 === 0) {
-      console.log(((pos / bufferView.byteLength) * 100) + "%");
-    }
-*/
   }
   return lines;
 }
@@ -460,12 +455,6 @@ function readIndex(rows) {
 function readJamo(rows) {
   const objRet = {};
   objRet.arrJamo = [];
-  for (let i = 0; i < 5; ++i) {
-    console.log("row", i);
-    for (const field of rows[i]) {
-      console.log(field);
-    }
-  }
   const headerRow = rows.shift();
   if (headerRow[1].trim() !== "#Value; Short Name; Unicode Name") {
     throw new Error("Jamo: Bad Header");
@@ -735,6 +724,11 @@ function readUnihan(rows) {
       const value = row[2];
       if (objRet.mapUnihan.has(category)) {
         objRet.mapUnihan.get(category)[code - firstCode] = value;
+      } else {
+        console.warn("Category Not Found: " + category);
+      }
+      if (category === "kGB3") {
+        console.log(category, value);
       }
     }
   }
@@ -1102,7 +1096,6 @@ function start( [ loadEvt, unicodeModule ] ) {
   inpUnicodeValue.addEventListener("change", function (evt) {
     try {
       const value = parseInt(inpUnicodeValue.value, 16);
-      console.log(value);
       thisChar = new unicodeModule.UnicodeCodePoint(value);
       divUnicodeChar.innerHTML = "";
       divUnicodeChar.appendChild(document.createTextNode(thisChar.toString()));
@@ -1186,11 +1179,6 @@ function parseSCSV(buffer) {
       }
     }
     ++pos;
-/*
-    if (pos % 1000 === 0) {
-      console.log(((pos / bufferView.byteLength) * 100) + "%");
-    }
-*/
   }
   return rows;
 }
@@ -1224,11 +1212,6 @@ function parseTSV(buffer) {
         break;
     }
     ++pos;
-/*
-    if (pos % 1000 === 0) {
-      console.log(((pos / bufferView.byteLength) * 100) + "%");
-    }
-*/
   }
   return rows;
 }
@@ -1258,7 +1241,6 @@ function getGeneralCategory(rows) {
     });
   });
   const percentInterval = setInterval(function () {
-    console.log(((rowsParsed / rows.length) * 100) + "%");
     if (rowsParsed === rows.length) {
       clearInterval(percentInterval);
     }
