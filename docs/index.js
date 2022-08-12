@@ -724,11 +724,11 @@ function readUnihan(rows) {
       const value = row[2];
       if (objRet.mapUnihan.has(category)) {
         objRet.mapUnihan.get(category)[code - firstCode] = value;
+        if (category === "kGB3") {
+          console.log(category, value);
+        }
       } else {
-        console.warn("Category Not Found: " + category);
-      }
-      if (category === "kGB3") {
-        console.log(category, value);
+        console.warn("Category Not Found: \"" + category + "\" code: " + code.toString(16));
       }
     }
   }
