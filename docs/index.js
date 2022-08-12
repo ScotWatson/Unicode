@@ -255,7 +255,7 @@ function show20Update(container) {
       }
       let retGB3 = "";
       if (objUnihan.mapUnihan.has("kGB3")) {
-        retGB0 = "export const kGB3 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB3")) + ";\n";
+        retGB3 = "export const kGB3 = " + JSON.stringify(objUnihan.mapUnihan.get("kGB3")) + ";\n";
         objUnihan.mapUnihan.delete("kGB3");
       }
       let retGB5 = "";
