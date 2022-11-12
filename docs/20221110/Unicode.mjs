@@ -4,7 +4,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 import * as Types from "https://scotwatson.github.io/Debug/20221107/Types.mjs";
-import * as ErrorHandling from "https://scotwatson.github.io/Debug/20221107/ErrorHandling.mjs";
+import * as ErrorHandling from "https://scotwatson.github.io/Debug/20221107/ErrorLog.mjs";
 import * as Category_1_1_5 from "https://scotwatson.github.io/Unicode/20221110/category-1.1.5.mjs";
 
 // Code points are assigned/designated to (abstract) characters, or given a normative function.
