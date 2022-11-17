@@ -3,9 +3,9 @@
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import * as Types from "https://scotwatson.github.io/Debug/20221107/Types.mjs";
-import * as ErrorHandling from "https://scotwatson.github.io/Debug/20221107/ErrorLog.mjs";
-import * as Category_1_1_5 from "https://scotwatson.github.io/Unicode/20221110/category-1.1.5.mjs";
+import * as Types from "https://scotwatson.github.io/Debug/Test/Types.mjs";
+import * as ErrorHandling from "https://scotwatson.github.io/Debug/Test/ErrorLog.mjs";
+import * as Category_1_1_5 from "https://scotwatson.github.io/Unicode/Test/category-1.1.5.mjs";
 
 // Code points are assigned/designated to (abstract) characters, or given a normative function.
 // Normalization maintains the sequence of abstract characters, but may change the sequence of code points.
