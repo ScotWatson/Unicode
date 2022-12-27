@@ -45,7 +45,7 @@ export class CodePoint {
   }
   valueOf() {
     try {
-      this.#str.codePointAt(0);
+      return this.#str.codePointAt(0);
     } catch (e) {
       ErrorLog.rethrow({
         functionName: "CodePoint.valueOf",
