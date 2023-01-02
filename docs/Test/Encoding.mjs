@@ -7,12 +7,19 @@ import * as Streams from "https://scotwatson.github.io/Streams/Test/Streams.mjs"
 
 export const utf8Decode = new Streams.Transform();
 utf8Decode.init = function () {
-  const state = {};
-  state.value = 0;
-  state.contBytes = 0;
-  state.inputView = null;
-  state.inputIndex = 0;
-  return state;
+  try {
+    const state = {};
+    state.value = 0;
+    state.contBytes = 0;
+    state.inputView = null;
+    state.inputIndex = 0;
+    return state;
+  } catch (e) {
+    ErrorLog.rethrow({
+      functionName: "utf8Decode.init",
+      error: e,
+    });
+  }
 }
 utf8Decode.execute = function (args) {
   const { inputView, state } = (function () {
@@ -30,7 +37,6 @@ utf8Decode.execute = function (args) {
   })();
   try {
     if (inputView !== null) {
-      console.log("pulse");
       // inputView is a Memory.View
       if (state.inputView === null) {
         state.inputView = inputView;
@@ -105,27 +111,46 @@ utf8Decode.execute = function (args) {
     return null;
   } catch (e) {
     ErrorLog.rethrow({
-      functionName: "utf8Decode",
+      functionName: "utf8Decode.execute",
       error: e,
     });
   }
 }
 utf8Decode.flush = function (args) {
-  const { state } = (function () {
-    let ret = {};
-    if (!("state" in args)) {
-      throw "Argument \"state\" must be provided.";
+  try {
+    const { state } = (function () {
+      let ret = {};
+      if (!("state" in args)) {
+        throw "Argument \"state\" must be provided.";
+      }
+      ret.state = args.state;
+      return ret;
+    })();
+    if (state.contBytes !== 0) {
+      state.contBytes = 0;
+      return new Unicode.CodePoint(0xFFFD);
+    } else {
+      return null;
     }
-    ret.state = args.state;
-    return ret;
-  })();
-  return null;
+  } catch (e) {
+    ErrorLog.rethrow({
+      functionName: "utf8Decode.flush",
+      error: e,
+    });
+  }
 };
 export const utf8Encode = new Streams.TransformToByte();
 utf8Encode.init = function () {
-  const state = {};
-  state.holdBytes = [];
-  return state;
+  try {
+    const state = {};
+    state.holdBytes = [];
+    return state;
+  } catch (e) {
+    ErrorLog.rethrow({
+      functionName: "utf8Encode.init",
+      error: e,
+    });
+  }
 };
 utf8Encode.execute = function (args) {
   try {
@@ -152,7 +177,6 @@ utf8Encode.execute = function (args) {
     });
     let bytesWritten = 0;
     function writeByte(value) {
-      console.log(value.toString(16))
       if (bytesWritten < outputArray.length) {
         outputArray.at(bytesWritten).set(value);
         ++bytesWritten;
@@ -165,10 +189,8 @@ utf8Encode.execute = function (args) {
       ++bytesWritten;
     }
     if (inputItem !== null) {
-      console.log(inputItem);
       // inputItem is a Unicode.CodePoint
       const codePoint = inputItem.valueOf();
-      console.log(codePoint.toString(16));
       if ((codePoint & 0xFFFF80) === 0) {
         // Use 1 byte to encode 7 bits
         writeByte(codePoint);
@@ -192,23 +214,47 @@ utf8Encode.execute = function (args) {
     return bytesWritten;
   } catch (e) {
     ErrorLog.rethrow({
-      functionName: "utf8Encode",
+      functionName: "utf8Encode.execute",
       error: e,
     });
   }
 }
 utf8Encode.flush = function (args) {
-  const { outputView, state } = (function () {
-    let ret = {};
-    if (!("output" in args)) {
-      throw "Argument \"output\" must be provided.";
+  try {
+    const { outputView, state } = (function () {
+      let ret = {};
+      if (!("output" in args)) {
+        throw "Argument \"output\" must be provided.";
+      }
+      ret.outputView = args.output;
+      if (!("state" in args)) {
+        throw "Argument \"state\" must be provided.";
+      }
+      ret.state = args.state;
+      return ret;
+    })();
+    const outputArray = new Memory.DataArray({
+      memoryView: outputView,
+      ElementClass: Memory.Uint8,
+    });
+    let bytesWritten = 0;
+    function writeByte(value) {
+      if (bytesWritten < outputArray.length) {
+        outputArray.at(bytesWritten).set(value);
+        ++bytesWritten;
+      } else {
+        state.holdBytes.push(value);
+      }
     }
-    ret.outputView = args.output;
-    if (!("state" in args)) {
-      throw "Argument \"state\" must be provided.";
+    while ((state.holdBytes.length !== 0) && (bytesWritten <= outputArray.length)) {
+      outputArray.at(bytesWritten).set(state.holdBytes.shift());
+      ++bytesWritten;
     }
-    ret.state = args.state;
-    return ret;
-  })();
-  return 0;
+    return bytesWritten;
+  } catch (e) {
+    ErrorLog.rethrow({
+      functionName: "utf8Encode.flush",
+      error: e,
+    });
+  }
 };
