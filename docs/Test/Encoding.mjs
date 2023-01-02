@@ -7,6 +7,7 @@ import * as Types from "https://scotwatson.github.io/Debug/Test/Types.mjs";
 import * as ErrorLog from "https://scotwatson.github.io/Debug/Test/ErrorLog.mjs";
 import * as Memory from "https://scotwatson.github.io/Memory/Test/Memory.mjs";
 import * as Streams from "https://scotwatson.github.io/Streams/Test/Streams.mjs";
+import * as Unicode from "https://scotwatson.github.io/Unicode/Test/Encoding.mjs";
 
 export const utf8Decode = new Streams.Transform();
 utf8Decode.init = function () {
