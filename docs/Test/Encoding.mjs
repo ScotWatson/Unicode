@@ -6,10 +6,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import * as Types from "https://scotwatson.github.io/Debug/Test/Types.mjs";
 import * as ErrorLog from "https://scotwatson.github.io/Debug/Test/ErrorLog.mjs";
 import * as Memory from "https://scotwatson.github.io/Memory/Test/Memory.mjs";
-import * as Streams from "https://scotwatson.github.io/Streams/Test/Streams.mjs";
+import * as Operations from "https://scotwatson.github.io/Streams/Test/Operations.mjs";
 import * as Unicode from "https://scotwatson.github.io/Unicode/Test/Unicode.mjs";
 
-export const utf8Decode = new Streams.Transform();
+export const utf8Decode = new Operations.Transform();
 utf8Decode.init = function () {
   try {
     const state = {};
@@ -143,7 +143,8 @@ utf8Decode.flush = function (args) {
     });
   }
 };
-export const utf8Encode = new Streams.TransformToByte();
+
+export const utf8Encode = new Operations.TransformToByte();
 utf8Encode.init = function () {
   try {
     const state = {};
