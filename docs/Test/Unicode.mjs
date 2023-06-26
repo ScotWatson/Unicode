@@ -12,30 +12,30 @@ import * as Category_1_1_5 from "https://scotwatson.github.io/Unicode/Test/categ
 // More than one code point sequence may be assigned/designated to the same (abstract) characters.
 
 export class CodePoint {
-  #str;
+  #value;
   constructor(args) {
     try {
-      let value;
-      if (Types.isInteger(args)) {
-        value = args;
-      } else if (Types.isSimpleObject(args)) {
-        if (!(Object.hasOwn(args, "value"))) {
+      this.#value = (function () {
+        if (Types.isInteger(args)) {
+          if (value < 0 || value > 0x10FFFF) {
+            throw "Invalid Arguments: value must be between 0 and 0x10FFFF, inclusive";
+          }
+          return args;
+        } else if (Types.isSimpleObject(args)) {
+          if (!(Object.hasOwn(args, "value"))) {
+            throw "Invalid Arguments";
+          }
+          if (Types.isInteger(args.value)) {
+            throw "Invalid Arguments: value must be a number";
+          }
+          if (args.value < 0 || args.value > 0x10FFFF) {
+            throw "Invalid Arguments: value must be between 0 and 0x10FFFF, inclusive";
+          }
+          return args.value;
+        } else {
           throw "Invalid Arguments";
         }
-        if (Types.isInteger(args.value)) {
-          throw "Invalid Arguments: value must be a number";
-        }
-        value = args.value;
-      } else {
-        throw "Invalid Arguments";
-      }
-      if (!(Types.isInteger(value))) {
-        throw "Invalid Arguments: value must be an integer";
-      }
-      if (value < 0 || value > 0x10FFFF) {
-        throw "Invalid Arguments: value must be between 0 and 0x10FFFF, inclusive";
-      }
-      this.#str = String.fromCodePoint(value);
+      })();
     } catch (e) {
       ErrorLog.rethrow({
         functionName: "CodePoint constructor",
@@ -45,7 +45,7 @@ export class CodePoint {
   }
   valueOf() {
     try {
-      return this.#str.codePointAt(0);
+      return this.#value;
     } catch (e) {
       ErrorLog.rethrow({
         functionName: "CodePoint.valueOf",
@@ -55,7 +55,7 @@ export class CodePoint {
   }
   toString() {
     try {
-      return this.#str;
+      return String.fromCodePoint(this.#value);
     } catch (e) {
       ErrorLog.rethrow({
         functionName: "CodePoint.toString",
@@ -65,13 +65,19 @@ export class CodePoint {
   }
   get category() {
     try {
-      return Category_1_1_5.generalCategory_1_1_5[this.#str.codePointAt(0)];
+      return Category_1_1_5.generalCategory_1_1_5[this.#value];
     } catch (e) {
       ErrorLog.rethrow({
         functionName: "get CodePoint.category",
         error: e,
       });
     }
+  }
+  isSurrogate() {
+    return ((this.#value > 0xD7FF) && (this.#value < 0xE000));
+  }
+  isScalar() {
+    return !(this.isSurrogate());
   }
   static fromSurrogatePair(args) {
     try {
