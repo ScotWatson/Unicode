@@ -72,29 +72,41 @@ export default class USVString {
         }
           break;
         case "object": {
-          const ret = {
-            value: "",
-            length: 0,
-          };
-          if ("toString" in args) {
-            if (USVString.VALIDATED in args && "length" in args) {
+          if (USVString.VALIDATED in args) {
+            // This means it is meant to be treated as a unicode string
+            if ("length" in args) {
               return {
                 value: args.toString(),
                 length: args.length,
               };
             } else {
+              const ret = {
+                value: args.toString(),
+                length: 0,
+              };
+              for (const char of args) {
+                length += 1;
+              }
+              return ret;
+            }
+          } else {
+            if (args[Symbol.iterator]) {
+              const ret = {
+                value: "",
+                length: 0,
+              };
+              for (const obj of args) {
+                const { value, length } = getString(obj);
+                ret.value += value;
+                ret.length += length;
+              }
+              return ret;
+            } else if ("toString" in args) {
               return getString(args.toString());
+            } else {
+              throw "Connot construct string from this type.";
             }
           }
-          if (!args[Symbol.iterator]) {
-            throw "Object must be iterable";
-          }
-          for (const obj of args) {
-            const { value, length } = getString(obj);
-            ret.value += value;
-            ret.length += length;
-          }
-          return ret;
         }
           break;
         default: {
