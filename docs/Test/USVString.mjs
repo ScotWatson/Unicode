@@ -38,24 +38,25 @@ export class USVString {
           };
           // In Javascript string type, code unit is UTF-16
           for (const codeUnit of str) {
-            if (pair) {
-              if (codeUnit >= 0xD800 && codeUnit < 0xDC00) {  // is lead surrogate
-                throw "two lead surrogates";
-              } else if (codeUnit >= 0xDC00 && codeUnit < 0xE000) {  // is trail surrogate
+            if (CodePoint.isSurrogate(codeUnit)) {
+              if (pair) {
+                if (codeUnit < 0xDC00) {
+                  throw "two lead surrogates";
+                }
                 // valid surrogate pair
                 ret.length += 1;
               } else {
-                throw "lead surrogate without trail surrogate";
-              }
-            } else {
-              if (codeUnit >= 0xD800 && codeUnit < 0xDC00) {  // is lead surrogate
+                if (codeUnit >= 0xDC00) {
+                  throw "trail surrogate without lead surrogate";
+                }
                 // start of surrogate pair
                 pair = true;
-              } else if (codeUnit >= 0xDC00 && codeUnit < 0xE000) {  // is trail surrogate
-                throw "trail surrogate without lead surrogate";
-              } else {
-                ret.length += 1;
               }
+            } else {
+              if (pair) {
+                throw "lead surrogate without trail surrogate";
+              }
+              ret.length += 1;
             }
           }
           if (pair) {
