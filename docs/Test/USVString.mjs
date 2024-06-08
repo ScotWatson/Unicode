@@ -8,7 +8,9 @@ import * as CodePoint from "https://scotwatson.github.io/Unicode/Test/unicode-co
 export default class USVString {
   #value;
   #length;
-  static const VALIDATED = Symbol.for("USVString_VALIDATED");
+  static get VALIDATED() {
+    return Symbol.for("USVString_VALIDATED");
+  }
   constructor(args) {
     this.#value = "":
     this.#length = 0;
