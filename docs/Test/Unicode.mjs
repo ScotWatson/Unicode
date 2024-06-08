@@ -17,7 +17,7 @@ export class USVString {
   constructor(args) {
     this.#value = "":
     this.length = 0;
-    append(args);
+    this.append(args);
   }
   append(args) {
     const { value, length } = getString(args);
@@ -27,11 +27,8 @@ export class USVString {
       switch (typeof args) {
         case "number": {
           const codePoint = args;
-          if (value < 0 || value > 0x10FFFF) {
-            throw "Invalid Arguments: value must be between 0 and 0x10FFFF, inclusive";
-          }
-          if (CodePoint.isSurrogate(codePoint)) {
-            throw "Surrogate code point is not allowed in Unicode Scalar Value string: " + codePoint;
+          if (!CodePoint.isScalar(codePoint)) {
+            throw "Only Unicode Scalar Values (no surrogates) are allowed in Unicode Scalar Value string: " + codePoint;
           }
           return {
             value: String.fromCodePoint(codePoint),
@@ -41,7 +38,10 @@ export class USVString {
           break;
         case "string": {
           let pair = false;
-          let length = 0;
+          const ret = {
+            value: args,
+            length: 0;
+          };
           // In Javascript string type, code unit is UTF-16
           for (const codeUnit of str) {
             if (pair) {
@@ -49,7 +49,7 @@ export class USVString {
                 throw "two lead surrogates";
               } else if (codeUnit >= 0xDC00 && codeUnit < 0xE000) {  // is trail surrogate
                 // valid surrogate pair
-                length += 1;
+                ret.length += 1;
               } else {
                 throw "lead surrogate without trail surrogate";
               }
@@ -60,32 +60,30 @@ export class USVString {
               } else if (codeUnit >= 0xDC00 && codeUnit < 0xE000) {  // is trail surrogate
                 return "trail surrogate without lead surrogate";
               } else {
-                length += 1;
+                ret.length += 1;
               }
             }
           }
           if (pair) {
             throw "lead surrogate without trail surrogate";
           }
-          return {
-            value: args,
-            length,
-          };
+          return ret;
         }
           break;
         case "object": {
-          let totalValue = "";
-          let totalLength = 0;
+          const ret = {
+            value: "",
+            length: 0,
+          };
           if (!args[Symbol.iterator]) {
             throw "Object must be iterable";
           }
           for (const obj of args) {
-            ({ value, length } = getString(obj));
+            const { value, length } = getString(obj);
+            ret.value += value;
+            ret.length += length;
           }
-          return {
-            value: totalValue,
-            length: totalLength,
-          };
+          return ret;
         }
           break;
         default: {
@@ -107,77 +105,26 @@ export class USVString {
     let pair;
     // In Javascript string type, code unit is UTF-16
     for (const codeUnit of this.#value) {
-      if (pair) {
-        // Due to internal validation, this can be assumed to be a trail surrogate
-        pair.trail = codeUnit;
-        yield CodePoint.fromSurrogatePair(pair);
-        pair = undefined;
-      } else {
-        if (CodePoint.isSurrogate(codeUnit)) {
+      if (CodePoint.isSurrogate(codeUnit)) {
+        if (pair) {
+          // Due to internal validation, this can be assumed to be a trail surrogate
+          pair.trail = codeUnit;
+          yield CodePoint.fromSurrogatePair(pair);
+          pair = undefined;
+        } else {
           // Due to internal validation, this can be assumed to be a lead surrogate
           pair = { lead: codeUnit };
-        } else {
-          yield codeUnit;
         }
+      } else {
+        yield codeUnit;
       }
     }
     return;
   }
 }
 
-export class CodePoint {
-  #value;
-  constructor(args) {
-    try {
-      this.#value = (function () {
-        if (Types.isInteger(args)) {
-          if (value < 0 || value > 0x10FFFF) {
-            throw "Invalid Arguments: value must be between 0 and 0x10FFFF, inclusive";
-          }
-          return args;
-        } else if (Types.isSimpleObject(args)) {
-          if (!(Object.hasOwn(args, "value"))) {
-            throw "Invalid Arguments";
-          }
-          if (Types.isInteger(args.value)) {
-            throw "Invalid Arguments: value must be a number";
-          }
-          if (args.value < 0 || args.value > 0x10FFFF) {
-            throw "Invalid Arguments: value must be between 0 and 0x10FFFF, inclusive";
-          }
-          return args.value;
-        } else {
-          throw "Invalid Arguments";
-        }
-      })();
-    } catch (e) {
-      ErrorLog.rethrow({
-        functionName: "CodePoint constructor",
-        error: e,
-      });
-    }
-  }
-  valueOf() {
-    try {
-      return this.#value;
-    } catch (e) {
-      ErrorLog.rethrow({
-        functionName: "CodePoint.valueOf",
-        error: e,
-      });
-    }
-  }
-  toString() {
-    try {
-      return String.fromCodePoint(this.#value);
-    } catch (e) {
-      ErrorLog.rethrow({
-        functionName: "CodePoint.toString",
-        error: e,
-      });
-    }
-  }
-  static getCategory(codePoint) {
+const CodePoint = {
+  getCategory(codePoint) {
     try {
       return Category_1_1_5.generalCategory_1_1_5[codePoint];
     } catch (e) {
@@ -186,14 +133,14 @@ export class CodePoint {
         error: e,
       });
     }
-  }
-  static isSurrogate(codePoint) {
+  },
+  isSurrogate(codePoint) {
     return ((codePoint > 0xD7FF) && (codePoint < 0xE000));
-  }
-  static isScalar() {
-    return !(isSurrogate(codePoint));
-  }
-  static fromSurrogatePair(args) {
+  },
+  isScalar(codePoint) {
+    return (((codePoint > 0x0000) && (codePoint < 0x110000)) && !(isSurrogate(codePoint)));
+  },
+  fromSurrogatePair(args) {
     try {
       if (!(Types.isSimpleObject(args))) {
         throw "Invalid Arguments";
@@ -223,5 +170,5 @@ export class CodePoint {
         error: e,
       });
     }
-  }
-}
+  },
+};
