@@ -11,6 +11,9 @@ export default class USVString {
   static get VALIDATED() {
     return Symbol.for("USVString_VALIDATED");
   }
+  static set VALIDATED() {
+    throw "USVString.VALIDATED is a constant";
+  }
   constructor(args) {
     this.#value = "";
     this.#length = 0;
@@ -40,7 +43,7 @@ export default class USVString {
             length: 0,
           };
           // In Javascript string type, code unit is UTF-16
-          for (const codeUnit of str) {
+          for (const codeUnit of args) {
             if (CodePoint.isSurrogate(codeUnit)) {
               if (pair) {
                 if (codeUnit < 0xDC00) {
