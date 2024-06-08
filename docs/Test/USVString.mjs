@@ -12,7 +12,7 @@ export default class USVString {
     return Symbol.for("USVString_VALIDATED");
   }
   constructor(args) {
-    this.#value = "":
+    this.#value = "";
     this.#length = 0;
     this.append(args);
   }
