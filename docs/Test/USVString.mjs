@@ -11,7 +11,7 @@ export default class USVString {
   static get VALIDATED() {
     return Symbol.for("USVString_VALIDATED");
   }
-  static set VALIDATED() {
+  static set VALIDATED(_) {
     throw "USVString.VALIDATED is a constant";
   }
   constructor(args) {
