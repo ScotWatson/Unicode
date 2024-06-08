@@ -5,9 +5,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 import * as CodePoint from "https://scotwatson.github.io/Unicode/Test/unicode-code-point.mjs";
 
-export class USVString {
+export default class USVString {
   #value;
   #length;
+  static const VALIDATED = Symbol.for("USVString_VALIDATED");
   constructor(args) {
     this.#value = "":
     this.length = 0;
@@ -70,6 +71,16 @@ export class USVString {
             value: "",
             length: 0,
           };
+          if ("toString" in args) {
+            if (VALIDATED in args && "length" in args) {
+              return {
+                value: args.toString(),
+                length: args.length,
+              };
+            } else {
+              return getString(args.toString());
+            }
+          }
           if (!args[Symbol.iterator]) {
             throw "Object must be iterable";
           }
