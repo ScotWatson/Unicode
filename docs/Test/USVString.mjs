@@ -11,7 +11,7 @@ export default class USVString {
   static const VALIDATED = Symbol.for("USVString_VALIDATED");
   constructor(args) {
     this.#value = "":
-    this.length = 0;
+    this.#length = 0;
     this.append(args);
   }
   append(args) {
@@ -72,7 +72,7 @@ export default class USVString {
             length: 0,
           };
           if ("toString" in args) {
-            if (VALIDATED in args && "length" in args) {
+            if (USVString.VALIDATED in args && "length" in args) {
               return {
                 value: args.toString(),
                 length: args.length,
@@ -98,11 +98,8 @@ export default class USVString {
       }
     }
   }
-  concat(other) {
-    this.#value += other.toString();
-  }
   get length() {
-    return length;
+    return this.#length;
   }
   toString() {
     return this.#value;
