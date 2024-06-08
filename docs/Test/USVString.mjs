@@ -34,7 +34,7 @@ export class USVString {
           let pair = false;
           const ret = {
             value: args,
-            length: 0;
+            length: 0,
           };
           // In Javascript string type, code unit is UTF-16
           for (const codeUnit of str) {
@@ -52,7 +52,7 @@ export class USVString {
                 // start of surrogate pair
                 pair = true;
               } else if (codeUnit >= 0xDC00 && codeUnit < 0xE000) {  // is trail surrogate
-                return "trail surrogate without lead surrogate";
+                throw "trail surrogate without lead surrogate";
               } else {
                 ret.length += 1;
               }
