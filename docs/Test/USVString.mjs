@@ -8,11 +8,11 @@ import * as CodePoint from "https://scotwatson.github.io/Unicode/Test/unicode-co
 export default class USVString {
   #value;
   #length;
-  static get VALIDATED() {
-    return Symbol.for("USVString_VALIDATED");
+  static get _validated() {
+    return Symbol.for("USVString._validated");
   }
-  static set VALIDATED(_) {
-    throw "USVString.VALIDATED is a constant";
+  static set _validated(_) {
+    throw "USVString._validated is a constant";
   }
   constructor(args) {
     this.#value = "";
