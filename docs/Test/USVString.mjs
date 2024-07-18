@@ -8,12 +8,6 @@ import * as CodePoint from "https://scotwatson.github.io/Unicode/Test/unicode-co
 export default class USVString {
   #value;
   #length;
-  static get _validated() {
-    return Symbol.for("USVString._validated");
-  }
-  static set _validated(_) {
-    throw "USVString._validated is a constant";
-  }
   constructor(args) {
     this.#value = "";
     this.#length = 0;
@@ -72,7 +66,7 @@ export default class USVString {
         }
           break;
         case "object": {
-          if (USVString.VALIDATED in args) {
+          if (toUnicode in args) {
             // This means it is meant to be treated as a unicode string
             if ("length" in args) {
               return {
@@ -119,6 +113,9 @@ export default class USVString {
     return this.#length;
   }
   toString() {
+    return this.#value;
+  }
+  toUnicode() {
     return this.#value;
   }
   *[Symbol.iterator]() {
