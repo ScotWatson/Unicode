@@ -37,7 +37,8 @@ export default class USVString {
             length: 0,
           };
           // In Javascript string type, code unit is UTF-16
-          for (const codeUnit of args) {
+          for (const char of args) {
+            const codeUnit = char.charCodeAt(0);
             if (CodePoint.isSurrogate(codeUnit)) {
               if (pair) {
                 if (codeUnit < 0xDC00) {
@@ -78,17 +79,11 @@ export default class USVString {
                 value: args.toUnicode(),
                 length: 0,
               };
-              let pair = false;
-              for (const codeUnit of args) {
-                if (CodePoint.isSurrogate(codeUnit)) {
-                  if (pair) {
-                    // This is a valid Unicode string, therefore this must be a trail surrogate
-                    ret.length += 1;
-                    pair = false;
-                  } else {
-                    // This is a valid Unicode string, therefore this must be a lead surrogate
-                    pair = true;
-                  }
+              for (const codeUnit of ret.value) {
+                const codeUnit = char.charCodeAt(0);
+                if ((codeUnit > 0xDC00) && (codeUnit < 0xE000)) {
+                  // This is a valid Unicode string, therefore this must be a lead surrogate of a suggogate pair
+                  // skip length increment to count pair as one code point
                 } else {
                   ret.length += 1;
                 }
