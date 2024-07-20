@@ -70,16 +70,28 @@ export default class USVString {
             // This means it is meant to be treated as a unicode string
             if ("length" in args) {
               return {
-                value: args.toString(),
+                value: args.toUnicode(),
                 length: args.length,
               };
             } else {
               const ret = {
-                value: args.toString(),
+                value: args.toUnicode(),
                 length: 0,
               };
-              for (const char of args) {
-                length += 1;
+              let pair = false;
+              for (const codeUnit of args) {
+                if (CodePoint.isSurrogate(codeUnit)) {
+                  if (pair) {
+                    // This is a valid Unicode string, therefore this must be a trail surrogate
+                    ret.length += 1;
+                    pair = false;
+                  } else {
+                    // This is a valid Unicode string, therefore this must be a lead surrogate
+                    pair = true;
+                  }
+                } else {
+                  ret.length += 1;
+                }
               }
               return ret;
             }
